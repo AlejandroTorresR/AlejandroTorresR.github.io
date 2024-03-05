@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import * as AFRAME from 'aframe';
-const scene = new AFRAME;
+AFRAME;
 export class CustomMemorama extends LitElement {
 
     static get properties() {
