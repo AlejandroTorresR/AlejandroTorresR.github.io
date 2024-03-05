@@ -59,7 +59,7 @@ export class CustomMemorama extends LitElement {
                 width="9.5" height="14" 
                 color="#fff"
                 rotation="0 ${rotate} 0" 
-                src="./src/assets/${card}.jpg"></a-plane>
+                src="./assets/${card}.jpg"></a-plane>
             `
         });
     }
