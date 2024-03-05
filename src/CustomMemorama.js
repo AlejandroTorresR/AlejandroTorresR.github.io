@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
 import * as AFRAME from 'aframe';
 AFRAME;
 export class CustomMemorama extends LitElement {
