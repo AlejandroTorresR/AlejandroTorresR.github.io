@@ -478,6 +478,8 @@ object-assign
 
 /*! load-bmfont */
 
+/*! no static exports found */
+
 /*! object-assign */
 
 /*! parse-bmfont-ascii */
@@ -529,6 +531,10 @@ object-assign
 /*! xml-parse-from-string */
 
 /*! xtend */
+
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
 
 /*!**********************!*\
   !*** ./package.json ***!
