@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import * as AFRAME from 'aframe';
-AFRAME;
 export class CustomMemorama extends LitElement {
 
     static get properties() {
@@ -68,7 +67,7 @@ export class CustomMemorama extends LitElement {
         return html`
             <a-scene xr-mode-ui="enabled: true">
                 ${this.createPlaneArray()}
-                <a-sky color="#91d5f2"></a-sky>
+                <a-sky color="#f9f9f9"></a-sky>
             </a-scene>
         `;
     }

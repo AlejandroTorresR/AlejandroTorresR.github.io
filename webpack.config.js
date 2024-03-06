@@ -7,7 +7,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: './src/index.html',
+            template: './index.html',
             chunks: ['main']
         }),
         new HtmlWebpackPlugin({
@@ -17,7 +17,8 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
-                { from: 'assets', to: 'assets' },
+                { from: 'src/assets', to: 'assets' },
+                { from: 'src/css', to: 'css' },
             ]
         })
     ],

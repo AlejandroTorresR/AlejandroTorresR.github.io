@@ -1,2 +1,2 @@
-import { CustomMemorama } from './CustomMemorama.js';
+import { CustomMemorama } from './components/custom-memorama.js';
 customElements.define('custom-memorama', CustomMemorama);
