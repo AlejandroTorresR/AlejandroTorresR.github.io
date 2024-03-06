@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
-import * as AFRAME from 'aframe';
+import 'aframe';
+import 'aframe-event-set-component';
 export class CustomMemorama extends LitElement {
 
     static get properties() {
@@ -41,9 +42,16 @@ export class CustomMemorama extends LitElement {
             '74677422', '74677423', '74677424', '74677422', '74677423', '74677424', '74677422', '74677423', '74677424', '74677422']
     }
 
+    _handleClick(e){
+        console.log(e.target.id, 'ev');
+        let el = this.shadowRoot.getElementById(e.target.id);
+        console.log(el, 'el')
+        el.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 2000; easing: linear;');
+    }
+
     createPlaneArray() {
         let x = -60, y = 35, z = -55, rotate = 20;
-        return this.cards.map((card) => {
+        return this.cards.map((card, index) => {
             if (x === 40) {
                 x = -50;
                 y -= 15;
@@ -53,12 +61,14 @@ export class CustomMemorama extends LitElement {
                 rotate -= 5;
             }
             return html`
-            <a-plane 
+            <a-box 
+                id="${index}"
+                @click="${this._handleClick}"
                 position="${x} ${y} ${z}"
                 width="9.5" height="14" 
                 color="#fff"
                 rotation="0 ${rotate} 0" 
-                src="./assets/${card}.jpg"></a-plane>
+                src="./assets/${card}.jpg"></a-box>
             `
         });
     }
@@ -68,6 +78,9 @@ export class CustomMemorama extends LitElement {
             <a-scene xr-mode-ui="enabled: true">
                 ${this.createPlaneArray()}
                 <a-sky color="#f9f9f9"></a-sky>
+                <a-camera>
+                  <a-cursor></a-cursor>
+                </a-camera>
             </a-scene>
         `;
     }
