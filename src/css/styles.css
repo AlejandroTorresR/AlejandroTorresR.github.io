@@ -1,7 +1,7 @@
 :root{
     --primary-gradient: linear-gradient(225deg, rgba(0, 0, 0, 0.08) 55%, rgba(255, 255, 255, 0.38) 43%);
-    --secondary-gradient: linear-gradient(102deg, #e95841 6%, #e94b63 95%);
-    --primary-color: #e95841;
+    --secondary-gradient: linear-gradient(102deg, #34469A 6%, #538FCB 95%);
+    --primary-color: #34469A;
     --black100: #000000;
     --black75: #181818;
     --black50: #333333;
@@ -73,6 +73,7 @@
     position: absolute;
     top: 16px;
     left: 16px;
+    width: 120px;
 }
 .menu{
     position: absolute;
@@ -109,7 +110,7 @@
 .rectangle {
     width: 76px;
     height: 4px;
-    background-image: linear-gradient(94deg, #e95841, #e94b63);
+    background-image: var(--secondary-gradient);
 }
 
 .profile{
@@ -125,7 +126,7 @@
     box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.16);
     background: var(--white100);
     border-radius: 50%;
-    padding: 20px;
+    padding: 8px;
     z-index: 1;
 }
 .profile .drop-shadow{
