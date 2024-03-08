@@ -39,11 +39,14 @@
                 width="9.5" height="14"
                 side="front"
                 color="#fff"
-                src="https://images.ygoprodeck.com/images/cards/${i}.jpg"
+                src="./assets/${i}.jpg"
                 rotation="0 ${n} 0">
             </a-plane>
             `)))}render(){return H`
             <a-scene xr-mode-ui="enabled: true">
+            <a-assets>
+                <img id="my-texture" src="https://images.ygoprodeck.com/images/cards/74677422.jpg">
+            </a-assets>
                 ${this.createPlaneArray()}
                 <a-sky color="#f9f9f9"></a-sky>
                 <a-camera>
