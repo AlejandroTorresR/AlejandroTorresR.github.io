@@ -45,8 +45,9 @@ export class CustomMemorama extends LitElement {
     _handleClick(e){
         console.log(e.target.id, 'ev');
         let el = this.shadowRoot.getElementById(e.target.id);
-        console.log(el, 'el')
-        el.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 2000; easing: linear;');
+        let back = this.shadowRoot.getElementById('back-' + e.target.id);
+        back.setAttribute('animation', 'property: rotation; to: 0 180 0; dur: 1000; easing: linear;');
+        el.setAttribute('animation', 'property: rotation; to: 0 180 0; dur: 1000; easing: linear;');
     }
 
     createPlaneArray() {
@@ -61,14 +62,25 @@ export class CustomMemorama extends LitElement {
                 rotate -= 5;
             }
             return html`
-            <a-box 
-                id="${index}"
-                @click="${this._handleClick}"
+            <a-plane 
+                id="back-${index}"
                 position="${x} ${y} ${z}"
-                width="9.5" height="14" 
+                width="9.5" height="14"
+                side="back"
                 color="#fff"
-                rotation="0 ${rotate} 0" 
-                src="./assets/${card}.jpg"></a-box>
+                src="./assets/${card}.jpg"
+                rotation="0 ${rotate} 0">
+            </a-plane>
+            <a-plane
+            @click="${this._handleClick}"
+                id="${index}"
+                position="${x} ${y} ${z}"
+                width="9.5" height="14"
+                side="front"
+                color="#fff"
+                src="./assets/card.jpg"
+                rotation="0 ${rotate} 0">
+            </a-plane>
             `
         });
     }
