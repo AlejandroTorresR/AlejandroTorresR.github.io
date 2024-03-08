@@ -20,15 +20,26 @@
             .a-enter-vr button:after{
                 content: 'Enter VR';
             }
-        `}constructor(){super(),this.cards=["74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422"]}_handleClick(e){console.log(e.target.id,"ev");let t=this.shadowRoot.getElementById(e.target.id);console.log(t,"el"),t.setAttribute("animation","property: rotation; to: 0 360 0; dur: 2000; easing: linear;")}createPlaneArray(){let e=-60,t=35,n=20;return this.cards.map(((i,r)=>(40===e?(e=-50,t-=15,n=20):(e+=10,n-=5),H`
-            <a-box 
-                id="${r}"
-                @click="${this._handleClick}"
+        `}constructor(){super(),this.cards=["74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677422","74677423","74677424","74677422","74677423","74677424","74677422","74677423","74677424","74677422"]}_handleClick(e){console.log(e.target.id,"ev");let t=this.shadowRoot.getElementById(e.target.id);this.shadowRoot.getElementById("back-"+e.target.id).setAttribute("animation","property: rotation; to: 0 180 0; dur: 1000; easing: linear;"),t.setAttribute("animation","property: rotation; to: 0 180 0; dur: 1000; easing: linear;")}createPlaneArray(){let e=-60,t=35,n=20;return this.cards.map(((i,r)=>(40===e?(e=-50,t-=15,n=20):(e+=10,n-=5),H`
+            <a-plane 
+                id="back-${r}"
                 position="${e} ${t} ${-55}"
-                width="9.5" height="14" 
+                width="9.5" height="14"
+                side="back"
                 color="#fff"
-                rotation="0 ${n} 0" 
-                src="./assets/${i}.jpg"></a-box>
+                src="./assets/${i}.jpg"
+                rotation="0 ${n} 0">
+            </a-plane>
+            <a-plane
+            @click="${this._handleClick}"
+                id="${r}"
+                position="${e} ${t} ${-55}"
+                width="9.5" height="14"
+                side="front"
+                color="#fff"
+                src="./assets/card.jpg"
+                rotation="0 ${n} 0">
+            </a-plane>
             `)))}render(){return H`
             <a-scene xr-mode-ui="enabled: true">
                 ${this.createPlaneArray()}
