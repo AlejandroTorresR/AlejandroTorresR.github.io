@@ -80,7 +80,6 @@ export class CustomMemorama extends LitElement {
         this.turn += 1;
         if (this.opened[0].card === this.opened[1].card) {
           this._closeCards('hide');
-          //this.score[this.turn % 2] += 1;
         } else {
           this._closeCards('open');
         }
@@ -147,9 +146,6 @@ export class CustomMemorama extends LitElement {
     render() {
         return html`
             <a-scene xr-mode-ui="enabled: true">
-            <a-assets>
-                <img id="my-texture" src="https://images.ygoprodeck.com/images/cards/74677422.jpg">
-            </a-assets>
                 ${this.createPlaneArray()}
                 <a-sky color="#f9f9f9"></a-sky>
                 <a-camera>
