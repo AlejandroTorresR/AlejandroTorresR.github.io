@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import 'aframe';
 import 'aframe-event-set-component';
+import mexico from '../json/mexico.json';
+
 export class CustomMemorama extends LitElement {
 
     static get properties() {
@@ -16,6 +18,9 @@ export class CustomMemorama extends LitElement {
             },
             turn: {
                 type: Number,
+            },
+            canMove: {
+                type: Boolean,
             }
         }
     }
@@ -47,36 +52,42 @@ export class CustomMemorama extends LitElement {
 
     constructor() {
         super();
-        this.cards = ['74677422', '74677423', '74677424']
+        // this.cards = ['74677422', '74677423', '74677424']
         this._init();
     }
 
     _init() {
+        this.cards = Object.keys(mexico);
         this.opened = [];
         this.turn = 0;
+        this.canMove = true;
         this.shuffle();
     }
 
     _handleClick(e) {
-        if(!this.opened.length || this.opened.length < 2 && this.opened[0].index !== e.target.id){
-            this.opened.push({
-                card: e.target.getAttribute('card'),
-                id: e.target.id,
-            });
-            console.log(this.opened, 'opened');
+        if(this.canMove){
+            if(!this.opened.length || this.opened.length < 2 && this.opened[0].index !== e.target.id){
+                this.opened.push({
+                    card: e.target.getAttribute('card'),
+                    id: e.target.id,
+                });
+                console.log(this.opened, 'opened');
+            }
+            if (this.opened.length === 2) {
+                this._played();
+            }
+            console.log(e.target.id, 'ev', e.target.getAttribute('card'), e.target.id);
+            let el = this.shadowRoot.getElementById(e.target.id);
+            let back = this.shadowRoot.getElementById('back-' + e.target.id);
+            back.setAttribute('animation', 'property: rotation; to: 0 0 0; dur: 1000; easing: linear;');
+            el.setAttribute('animation', 'property: rotation; to: 0 0 0; dur: 1000; easing: linear;');
+            this.canMove = false;
+            setTimeout(()=> this.canMove = true, 2000)
         }
-        if (this.opened.length === 2) {
-            this._played();
-        }
-        console.log(e.target.id, 'ev', e.target.getAttribute('card'), e.target.id);
-        let el = this.shadowRoot.getElementById(e.target.id);
-        let back = this.shadowRoot.getElementById('back-' + e.target.id);
-        back.setAttribute('animation', 'property: rotation; to: 0 0 0; dur: 1000; easing: linear;');
-        el.setAttribute('animation', 'property: rotation; to: 0 0 0; dur: 1000; easing: linear;');
     }
 
     _played() {
-        //this.canMove = false;
+        this.canMove = false;
         this.turn += 1;
         if (this.opened[0].card === this.opened[1].card) {
           this._closeCards('hide');
@@ -95,7 +106,7 @@ export class CustomMemorama extends LitElement {
                 this.shadowRoot.getElementById('back-' + this.opened[1].id).setAttribute('animation', 'property: rotation; to: 0 180 0; dur: 500; easing: linear;');
             }
             this.opened = [];
-            //this.canMove = true;
+            setTimeout(()=> this.canMove = true, 1100)
             resolve();
           }, 1500);
         });
@@ -103,7 +114,6 @@ export class CustomMemorama extends LitElement {
 
     shuffle() {
         this.deck = this.cards.concat(this.cards).sort(() => Math.random() - 0.5);
-        console.log(this.deck, 'deck')
     }
 
     createPlaneArray() {
@@ -111,8 +121,8 @@ export class CustomMemorama extends LitElement {
         return this.deck.map((card, index) => {
             if (x === 40) {
                 x = -50;
-                y -= 15;
-                rotate = 20;
+                y -= 10;
+                rotate = 200;
             } else {
                 x += 10
                 rotate -= 5;
@@ -123,24 +133,32 @@ export class CustomMemorama extends LitElement {
                 id="${index}"
                 card="${card}"
                 position="${x} ${y} ${z}"
-                width="9.5" height="14"
+                width="9.5" height="9.5"
                 side="back"
-                color="#fff"
-                src="./assets/card.jpg"
-                rotation="0 ${rotate} 0">
+                color="#000"
+                rotation="0 180 0">
             </a-plane>
             <a-plane
                 id="back-${index}"
                 card="${card}"
                 position="${x} ${y} ${z}"
-                width="9.5" height="14"
+                width="9.5" height="9.5"
                 side="front"
                 color="#fff"
-                src="./assets/${card}.jpg"
-                rotation="0 ${rotate} 0">
+                text="value: ${mexico[card][0]}; width:20; align:center;"
+                src="./assets/mx/${card}.svg"
+                rotation="0 180 0">
             </a-plane>
             `
         });
+    }
+
+    async createAssets(){
+        return html`
+            <a-assets>
+                <img src="./assets/card.jpg" id="bg-card" />
+            </a-assets>
+        `;
     }
 
     render() {
