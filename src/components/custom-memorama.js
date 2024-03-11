@@ -70,17 +70,18 @@ export class CustomMemorama extends LitElement {
                 this.opened.push({
                     card: e.target.getAttribute('card'),
                     id: e.target.id,
+                    rotation: e.target.getAttribute('att-rotate')
                 });
                 console.log(this.opened, 'opened');
             }
             if (this.opened.length === 2) {
                 this._played();
             }
-            console.log(e.target.id, 'ev', e.target.getAttribute('card'), e.target.id);
+            console.log(e.target.id, 'ev', e.target.getAttribute('card'), e.target.getAttribute('att-rotate'));
             let el = this.shadowRoot.getElementById(e.target.id);
             let back = this.shadowRoot.getElementById('back-' + e.target.id);
-            back.setAttribute('animation', 'property: rotation; to: 0 0 0; dur: 1000; easing: linear;');
-            el.setAttribute('animation', 'property: rotation; to: 0 0 0; dur: 1000; easing: linear;');
+            back.setAttribute('animation', `property: rotation; to: 0 ${e.target.getAttribute('att-rotate') - 180} 0; dur: 1000; easing: linear;`);
+            el.setAttribute('animation', `property: rotation; to: 0 ${e.target.getAttribute('att-rotate') - 180} 0; dur: 1000; easing: linear;`);
             this.canMove = false;
             setTimeout(()=> this.canMove = true, 2000)
         }
@@ -100,10 +101,10 @@ export class CustomMemorama extends LitElement {
         return new Promise(resolve => {
           setTimeout(() => {
             if(event === 'open'){
-                this.shadowRoot.getElementById(this.opened[0].id).setAttribute('animation', 'property: rotation; to: 0 180 0; dur: 500; easing: linear;');
-                this.shadowRoot.getElementById('back-' + this.opened[0].id).setAttribute('animation', 'property: rotation; to: 0 180 0; dur: 500; easing: linear;');
-                this.shadowRoot.getElementById(this.opened[1].id).setAttribute('animation', 'property: rotation; to: 0 180 0; dur: 500; easing: linear;');
-                this.shadowRoot.getElementById('back-' + this.opened[1].id).setAttribute('animation', 'property: rotation; to: 0 180 0; dur: 500; easing: linear;');
+                this.shadowRoot.getElementById(this.opened[0].id).setAttribute('animation', `property: rotation; to: 0 ${this.opened[0].rotation} 0; dur: 500; easing: linear;`);
+                this.shadowRoot.getElementById('back-' + this.opened[0].id).setAttribute('animation', `property: rotation; to: 0 ${this.opened[0].rotation} 0; dur: 500; easing: linear;`);
+                this.shadowRoot.getElementById(this.opened[1].id).setAttribute('animation', `property: rotation; to: 0 ${this.opened[1].rotation} 0; dur: 500; easing: linear;`);
+                this.shadowRoot.getElementById('back-' + this.opened[1].id).setAttribute('animation', `property: rotation; to: 0 ${this.opened[1].rotation} 0; dur: 500; easing: linear;`);
             }
             this.opened = [];
             setTimeout(()=> this.canMove = true, 1100)
@@ -117,37 +118,40 @@ export class CustomMemorama extends LitElement {
     }
 
     createPlaneArray() {
-        let x = -60, y = 35, z = -55, rotate = 200;
-        return this.deck.map((card, index) => {
-            if (x === 40) {
-                x = -50;
-                y -= 10;
-                rotate = 200;
+        let x = -120, y = 35, z = -60, rotate = 240;
+        return this.deck.map((card, index) => {            
+            if (x === 100) {
+                x = -100; // reset horizontal
+                y -= 22; // baja vertical
+                z = -60; //profundidad
+                rotate = 230; // reset rotacion
             } else {
-                x += 10
-                rotate -= 5;
+                x += 20; 
+                rotate -= 10;
             }
+            x >= 10 ? z += 10 : z -= 10;
             return html`
             <a-plane 
                 @click="${this._handleClick}"
                 id="${index}"
                 card="${card}"
                 position="${x} ${y} ${z}"
-                width="9.5" height="9.5"
+                width="20" height="20"
                 side="back"
                 color="#000"
-                rotation="0 180 0">
+                att-rotate="${rotate}"
+                rotation="0 ${rotate} 0">
             </a-plane>
             <a-plane
                 id="back-${index}"
                 card="${card}"
                 position="${x} ${y} ${z}"
-                width="9.5" height="9.5"
+                width="20" height="20"
                 side="front"
                 color="#fff"
-                text="value: ${mexico[card][0]}; width:20; align:center;"
+                text="value: ${mexico[card][0]}; width:40; align:center;"
                 src="./assets/mx/${card}.svg"
-                rotation="0 180 0">
+                rotation="0 ${rotate} 0">
             </a-plane>
             `
         });
@@ -161,11 +165,16 @@ export class CustomMemorama extends LitElement {
         `;
     }
 
+    async createSky(){
+        return html`
+            <a-sky color="#f9f9f9"></a-sky>
+        `;
+    }
+
     render() {
         return html`
             <a-scene xr-mode-ui="enabled: true">
                 ${this.createPlaneArray()}
-                <a-sky color="#f9f9f9"></a-sky>
                 <a-camera>
                   <a-cursor></a-cursor>
                 </a-camera>

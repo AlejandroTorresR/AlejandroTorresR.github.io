@@ -20,36 +20,38 @@
             .a-enter-vr button:after{
                 content: 'Enter VR';
             }
-        `}constructor(){super(),this._init()}_init(){this.cards=Object.keys(ce),this.opened=[],this.turn=0,this.canMove=!0,this.shuffle()}_handleClick(e){if(this.canMove){(!this.opened.length||this.opened.length<2&&this.opened[0].index!==e.target.id)&&(this.opened.push({card:e.target.getAttribute("card"),id:e.target.id}),console.log(this.opened,"opened")),2===this.opened.length&&this._played(),console.log(e.target.id,"ev",e.target.getAttribute("card"),e.target.id);let t=this.shadowRoot.getElementById(e.target.id);this.shadowRoot.getElementById("back-"+e.target.id).setAttribute("animation","property: rotation; to: 0 0 0; dur: 1000; easing: linear;"),t.setAttribute("animation","property: rotation; to: 0 0 0; dur: 1000; easing: linear;"),this.canMove=!1,setTimeout((()=>this.canMove=!0),2e3)}}_played(){this.canMove=!1,this.turn+=1,this.opened[0].card===this.opened[1].card?this._closeCards("hide"):this._closeCards("open")}_closeCards(e){return new Promise((t=>{setTimeout((()=>{"open"===e&&(this.shadowRoot.getElementById(this.opened[0].id).setAttribute("animation","property: rotation; to: 0 180 0; dur: 500; easing: linear;"),this.shadowRoot.getElementById("back-"+this.opened[0].id).setAttribute("animation","property: rotation; to: 0 180 0; dur: 500; easing: linear;"),this.shadowRoot.getElementById(this.opened[1].id).setAttribute("animation","property: rotation; to: 0 180 0; dur: 500; easing: linear;"),this.shadowRoot.getElementById("back-"+this.opened[1].id).setAttribute("animation","property: rotation; to: 0 180 0; dur: 500; easing: linear;")),this.opened=[],setTimeout((()=>this.canMove=!0),1100),t()}),1500)}))}shuffle(){this.deck=this.cards.concat(this.cards).sort((()=>Math.random()-.5))}createPlaneArray(){let e=-60,t=35,n=200;return this.deck.map(((i,r)=>(40===e?(e=-50,t-=10,n=200):(e+=10,n-=5),H`
+        `}constructor(){super(),this._init()}_init(){this.cards=Object.keys(ce),this.opened=[],this.turn=0,this.canMove=!0,this.shuffle()}_handleClick(e){if(this.canMove){(!this.opened.length||this.opened.length<2&&this.opened[0].index!==e.target.id)&&(this.opened.push({card:e.target.getAttribute("card"),id:e.target.id,rotation:e.target.getAttribute("att-rotate")}),console.log(this.opened,"opened")),2===this.opened.length&&this._played(),console.log(e.target.id,"ev",e.target.getAttribute("card"),e.target.getAttribute("att-rotate"));let t=this.shadowRoot.getElementById(e.target.id);this.shadowRoot.getElementById("back-"+e.target.id).setAttribute("animation",`property: rotation; to: 0 ${e.target.getAttribute("att-rotate")-180} 0; dur: 1000; easing: linear;`),t.setAttribute("animation",`property: rotation; to: 0 ${e.target.getAttribute("att-rotate")-180} 0; dur: 1000; easing: linear;`),this.canMove=!1,setTimeout((()=>this.canMove=!0),2e3)}}_played(){this.canMove=!1,this.turn+=1,this.opened[0].card===this.opened[1].card?this._closeCards("hide"):this._closeCards("open")}_closeCards(e){return new Promise((t=>{setTimeout((()=>{"open"===e&&(this.shadowRoot.getElementById(this.opened[0].id).setAttribute("animation",`property: rotation; to: 0 ${this.opened[0].rotation} 0; dur: 500; easing: linear;`),this.shadowRoot.getElementById("back-"+this.opened[0].id).setAttribute("animation",`property: rotation; to: 0 ${this.opened[0].rotation} 0; dur: 500; easing: linear;`),this.shadowRoot.getElementById(this.opened[1].id).setAttribute("animation",`property: rotation; to: 0 ${this.opened[1].rotation} 0; dur: 500; easing: linear;`),this.shadowRoot.getElementById("back-"+this.opened[1].id).setAttribute("animation",`property: rotation; to: 0 ${this.opened[1].rotation} 0; dur: 500; easing: linear;`)),this.opened=[],setTimeout((()=>this.canMove=!0),1100),t()}),1500)}))}shuffle(){this.deck=this.cards.concat(this.cards).sort((()=>Math.random()-.5))}createPlaneArray(){let e=-120,t=35,n=-60,i=240;return this.deck.map(((r,s)=>(100===e?(e=-100,t-=22,n=-60,i=230):(e+=20,i-=10),e>=10?n+=10:n-=10,H`
             <a-plane 
                 @click="${this._handleClick}"
-                id="${r}"
-                card="${i}"
-                position="${e} ${t} ${-55}"
-                width="9.5" height="9.5"
+                id="${s}"
+                card="${r}"
+                position="${e} ${t} ${n}"
+                width="20" height="20"
                 side="back"
                 color="#000"
-                rotation="0 180 0">
+                att-rotate="${i}"
+                rotation="0 ${i} 0">
             </a-plane>
             <a-plane
-                id="back-${r}"
-                card="${i}"
-                position="${e} ${t} ${-55}"
-                width="9.5" height="9.5"
+                id="back-${s}"
+                card="${r}"
+                position="${e} ${t} ${n}"
+                width="20" height="20"
                 side="front"
                 color="#fff"
-                text="value: ${ce[i][0]}; width:20; align:center;"
-                src="./assets/mx/${i}.svg"
-                rotation="0 180 0">
+                text="value: ${ce[r][0]}; width:40; align:center;"
+                src="./assets/mx/${r}.svg"
+                rotation="0 ${i} 0">
             </a-plane>
             `)))}async createAssets(){return H`
             <a-assets>
                 <img src="./assets/card.jpg" id="bg-card" />
             </a-assets>
+        `}async createSky(){return H`
+            <a-sky color="#f9f9f9"></a-sky>
         `}render(){return H`
             <a-scene xr-mode-ui="enabled: true">
                 ${this.createPlaneArray()}
-                <a-sky color="#f9f9f9"></a-sky>
                 <a-camera>
                   <a-cursor></a-cursor>
                 </a-camera>
