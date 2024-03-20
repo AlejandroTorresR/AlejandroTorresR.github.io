@@ -15,6 +15,11 @@ module.exports = {
             template: './src/memorama.html',
             chunks: ['exampleEntry']
         }),
+        new HtmlWebpackPlugin({
+            filename: 'maker.html',
+            template: './src/maker.html',
+            chunks: ['exampleEntry']
+        }),
         new CopyWebpackPlugin({
             patterns: [
                 { from: 'src/assets', to: 'assets' },
