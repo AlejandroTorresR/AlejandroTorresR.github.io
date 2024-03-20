@@ -8,6 +8,7 @@ export class CardMaker extends LitElement {
     }
     #card{
         border-radius: 4px;
+        max-width: 340px;
         width: 100%;
         box-sizing: border-box;
       }
@@ -98,9 +99,23 @@ export class CardMaker extends LitElement {
         level: 8,
         race: "Fiend",
         attribute: "DARK",
+      }, {
+        id: 12580477,
+        name: "Raigeki",
+        type: "Spell Card",
+        frameType: "spell",
+        desc: "Destroy all monsters your opponent controls.",
+        race: "Normal",
+      }, {
+        id: 44095762,
+        name: "Mirror Force",
+        type: "Trap Card",
+        frameType: "trap",
+        desc: "When an opponent's monster declares an attack: Destroy all your opponent's Attack Position monsters.",
+        race: "Normal",
       }
     ]
-    this.card = this.cards[5];
+    this.card = this.cards[8];
   }
 
   firstUpdated(){
@@ -116,18 +131,20 @@ export class CardMaker extends LitElement {
       const bg = new Image();
       bg.onload = () => {
 
-        this.ctx.drawImage(bg, 0, 0, 300, 442);
-        if(this.card.frameType === 'xyz' || this.card.frameType === 'link') this.ctx.fillStyle = "white";
+        this.ctx.drawImage(bg, 0, 0, 600, 884);
+        if (['link', 'xyz', 'spell', 'trap'].includes(this.card.frameType)) this.ctx.fillStyle = "white";
         this.setNameCard();
         this.ctx.fillStyle = "black";
         this.setAttribute();
-        if(this.card.frameType !== 'link') this.setLevel();
+        if(this.card.frameType !== 'link' && this.card.frameType !== 'spell' && this.card.frameType !== 'trap') this.setLevel();
         this.setAtkDef();
-        this.setRace(22, 346);
-        let size = 12;
-        if(this.card.desc.length > 100) size = 12 - this.firstDigit(this.card.desc.length);
-        if(this.card.frameType === 'link') size -= 1.5;
-        this.setDescription(this.ctx, this.card.desc, 22, 358, size, 256, `${size}px matrix`);
+        this.setRace();
+        let size = 19.5;
+        if(this.card.desc.length > 100) size = size - this.firstDigit(this.card.desc.length);
+        if(this.card.frameType === 'link') size -= 3;
+        let y = 716;
+        if (['spell', 'trap'].includes(this.card.frameType)) y = 696;
+        this.setDescription(this.ctx, this.card.desc, 44, y, size, 512, `${size}px matrix`);
       };
       this.setImageCard();
       bg.src = `./assets/maker/bgs/${this.card.frameType}.png`;
@@ -143,52 +160,60 @@ export class CardMaker extends LitElement {
 
   setImageCard(){
     const img = new Image();
-    img.onload = () => this.ctx.drawImage(img, 34, 80, 232, 232);
+    img.onload = () => this.ctx.drawImage(img, 68, 160, 464, 464);
     img.src = `./assets/${this.card.id}.jpg`;
   }
   setNameCard(){
-    this.ctx.font = `small-caps 600 28px matrix`;
-    this.ctx.fillText(this.card.name, 25, 44, 220);
+    this.ctx.font = `small-caps 600 56px matrix`;
+    this.ctx.fillText(this.card.name, 50, 88, 440);
   }
   setAttribute(){
     const attribute = new Image();
-    attribute.onload = () => this.ctx.drawImage(attribute, 252, 16, 32, 32);
-    attribute.src = `./assets/filters/${this.card.attribute.toLowerCase()}.svg`;
+    attribute.onload = () => this.ctx.drawImage(attribute, 504, 32, 64, 64);
+    let att = this.card.attribute ? this.card.attribute.toLowerCase() : this.card.frameType;
+    attribute.src = `./assets/filters/${att}.svg`;
   }
   setLevel(){
     const level = new Image();
     let frameType = {
       src: './assets/maker/star/Normal.png',
-      x: 246
+      x: 492
     }
     if(this.card.frameType === 'xyz'){
       frameType = {
         src: './assets/maker/star/Xyz.png',
-        x: 25
+        x: 50
       }
     }
     level.onload = () => {
       for(let i of [...Array(this.card.level)]){
-        this.ctx.drawImage(level, frameType.x, 52, 20, 20);
-        this.card.frameType === 'xyz' ? frameType.x += 22 : frameType.x -= 22;
+        this.ctx.drawImage(level, frameType.x, 104, 40, 40);
+        this.card.frameType === 'xyz' ? frameType.x += 44 : frameType.x -= 44;
       }
     };
     level.src = frameType.src;
   }
   setAtkDef(){
-    this.ctx.font = `small-caps 600 13px matrix`;
-    this.ctx.fillText(this.card.atk, 190, 415);
-    if(this.card.def) this.ctx.fillText(this.card.def, 250, 415);
-    if(this.card.linkval) this.ctx.fillText(this.card.linkval, 266, 415);
+    this.ctx.font = `small-caps 600 26px matrix`;
+    if(this.card.atk) this.ctx.fillText(this.card.atk, 380, 830);
+    if(this.card.def) this.ctx.fillText(this.card.def, 500, 830);
+    if(this.card.linkval) this.ctx.fillText(this.card.linkval, 532, 830);
   }
-  setRace(x, y){
-    this.ctx.font = `small-caps 600 14px matrix`;
+  setRace(){
+    let x = 44, y = 692;
+    this.ctx.font = `small-caps 600 26px matrix`;
     let raceText = this.card.frameType === 'normal' || this.card.frameType === 'effect' ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`
+    if (['spell', 'trap'].includes(this.card.frameType)) {
+      this.ctx.textAlign = "right"; 
+      x = 540; 
+      y = 130; 
+      raceText = `[${this.card.type}]`
+    };
     this.ctx.fillText(raceText, x, y);
   }
   setDescription(context , text, x, y, lineHeight, fitWidth, font){
-    console.log(text.length, 'l')
     context.font = font;
+    context.textAlign = 'left';
     fitWidth = fitWidth || 0;
     if (fitWidth <= 0) {
         context.fillText( text, x, y );
@@ -210,7 +235,7 @@ export class CardMaker extends LitElement {
   }
 
   render() {
-    return html`<canvas id="card" height="442"></canvas>`;
+    return html`<canvas id="card" height="884" width="600"></canvas>`;
   }
 
 }
