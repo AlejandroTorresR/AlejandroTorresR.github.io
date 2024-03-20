@@ -113,9 +113,23 @@ export class CardMaker extends LitElement {
         frameType: "trap",
         desc: "When an opponent's monster declares an attack: Destroy all your opponent's Attack Position monsters.",
         race: "Normal",
+      }, {
+        id: 48017809,
+        name: "Mirage Tube",
+        type: "Spell Card",
+        frameType: "spell",
+        desc: "This card cannot be activated from your hand. Activate only when a face-up monster you control is selected as an attack target. Inflict 1000 damage to your opponent.",
+        race: "Quick-Play",
+      }, {
+        id: 22359980,
+        name: "Mirror Wall",
+        type: "Trap Card",
+        frameType: "trap",
+        desc: "Each of your opponent's monsters that conducted an attack while this card was face-up on the field has its ATK halved as long as this card remains on the field. During each of your Standby Phases, pay 2000 LP or destroy this card.",
+        race: "Continuous",
       }
     ]
-    this.card = this.cards[8];
+    this.card = this.cards[9];
   }
 
   firstUpdated(){
@@ -143,7 +157,7 @@ export class CardMaker extends LitElement {
         if(this.card.desc.length > 100) size = size - this.firstDigit(this.card.desc.length);
         if(this.card.frameType === 'link') size -= 3;
         let y = 716;
-        if (['spell', 'trap'].includes(this.card.frameType)) y = 696;
+        if (['spell', 'trap'].includes(this.card.frameType)) y = 694;
         this.setDescription(this.ctx, this.card.desc, 44, y, size, 512, `${size}px matrix`);
       };
       this.setImageCard();
@@ -161,15 +175,15 @@ export class CardMaker extends LitElement {
   setImageCard(){
     const img = new Image();
     img.onload = () => this.ctx.drawImage(img, 68, 160, 464, 464);
-    img.src = `./assets/${this.card.id}.jpg`;
+    img.src = `https://images.ygoprodeck.com/images/cards_cropped/${this.card.id}.jpg` //`./assets/${this.card.id}.jpg`;
   }
   setNameCard(){
-    this.ctx.font = `small-caps 600 56px matrix`;
-    this.ctx.fillText(this.card.name, 50, 88, 440);
+    this.ctx.font = 'small-caps 500 46px matrix ultra-expanded';
+    this.ctx.fillText(this.card.name, 42, 82, 440);
   }
   setAttribute(){
     const attribute = new Image();
-    attribute.onload = () => this.ctx.drawImage(attribute, 504, 32, 64, 64);
+    attribute.onload = () => this.ctx.drawImage(attribute, 504, 38, 58, 58);
     let att = this.card.attribute ? this.card.attribute.toLowerCase() : this.card.frameType;
     attribute.src = `./assets/filters/${att}.svg`;
   }
@@ -204,12 +218,32 @@ export class CardMaker extends LitElement {
     this.ctx.font = `small-caps 600 26px matrix`;
     let raceText = this.card.frameType === 'normal' || this.card.frameType === 'effect' ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`
     if (['spell', 'trap'].includes(this.card.frameType)) {
-      this.ctx.textAlign = "right"; 
-      x = 540; 
-      y = 130; 
-      raceText = `[${this.card.type}]`
+      this.ctx.font = 'small-caps 600 36px matrix ultra-expanded';
+      this.ctx.textAlign = 'right';
+      x = 540;
+      y = 136;
+      if(['Quick-Play', 'Continuous', 'Ritual', 'Field', 'Equip', 'Counter'].includes(this.card.race)){
+        raceText = `[${this.card.type}     ]`
+        this.setTypeIcon();
+      } else {
+        raceText = `[${this.card.type}]`
+      }
     };
     this.ctx.fillText(raceText, x, y);
+  }
+  setTypeIcon(){
+    this.ctx.arc(510, 124, 14, 0, Math.PI * 2);
+    this.ctx.fillStyle = 'white';
+    this.ctx.fill();
+    this.ctx.fillStyle = 'black';
+    fetch(`./assets/filters/${this.card.race.toLowerCase()}.svg`)
+    .then(res => res.text())
+    .then(svgXml => {
+      var img = new Image();
+      var coloredSvgXml = svgXml.replace(/width/g,"fill='black' width");
+      img.onload = () => this.ctx.drawImage(img, 494, 110, 30, 30);
+      img.src = "data:image/svg+xml;charset=utf-8,"+coloredSvgXml;
+    });
   }
   setDescription(context , text, x, y, lineHeight, fitWidth, font){
     context.font = font;
