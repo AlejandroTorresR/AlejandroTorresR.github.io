@@ -127,9 +127,25 @@ export class CardMaker extends LitElement {
         frameType: "trap",
         desc: "Each of your opponent's monsters that conducted an attack while this card was face-up on the field has its ATK halved as long as this card remains on the field. During each of your Standby Phases, pay 2000 LP or destroy this card.",
         race: "Continuous",
+      }, {
+        id: 30194529,
+        name: "Ningirsu the World Chalice Warrior",
+        type: "Link Monster",
+        frameType: "link",
+        desc: "2+ Link Monsters\r\nIf this card is Link Summoned: Draw cards equal to the number of \"World Chalice\" monsters this card points to. You can only use this effect of \"Ningirsu the World Chalice Warrior\" once per turn. Once per turn: You can send 1 card from each player's field to the GYs. If this card is sent from the field to the GY: You can Special Summon 1 \"World Chalice\" monster from your hand.",
+        atk: 2500,
+        race: "Warrior",
+        attribute: "EARTH",
+        archetype: "World Chalice",
+        linkval: 3,
+        linkmarkers: [
+            "Left",
+            "Top",
+            "Right"
+        ],
       }
     ]
-    this.card = this.cards[9];
+    this.card = this.cards[11];
   }
 
   firstUpdated(){
@@ -211,8 +227,42 @@ export class CardMaker extends LitElement {
     this.ctx.font = `small-caps 600 26px matrix`;
     if(this.card.atk) this.ctx.fillText(this.card.atk, 380, 830);
     if(this.card.def) this.ctx.fillText(this.card.def, 500, 830);
-    if(this.card.linkval) this.ctx.fillText(this.card.linkval, 532, 830);
+    if(this.card.linkval) {
+      this.ctx.fillText(this.card.linkval, 532, 830);
+      this.setSmallArrow(this.card.linkmarkers);
+      this.setBigArrow(this.card.linkmarkers);
+    };
   }
+  setSmallArrow(params){
+    const small = new Image();
+    small.onload = () => {
+      console.log(params, 'small');
+      if(params.includes('Bottom-Left')) this.ctx.drawImage(small, 45, 590, 60, 60);
+      this.ctx.rotate(90*Math.PI/180);
+      if(params.includes('Top-Left')) this.ctx.drawImage(small, 135, -105, 60, 60); // Top Left
+      this.ctx.rotate(90*Math.PI/180);
+      if(params.includes('Top-Right')) this.ctx.drawImage(small, -555, -195, 60, 60); // Top Right
+      this.ctx.rotate(90*Math.PI/180);
+      if(params.includes('Bottom-Right')) this.ctx.drawImage(small, -650, 495, 60, 60); // Bottom Right
+    };
+    small.src = `./assets/maker/star/small.png`;
+  }
+  setBigArrow(params){
+    const big = new Image();
+    big.onload = () => {
+      this.ctx.rotate(90*Math.PI/180);
+      if(params.includes('Bottom')) this.ctx.drawImage(big, 235, 625, 125, 30);
+      this.ctx.rotate(90*Math.PI/180);
+      if(params.includes('Left')) this.ctx.drawImage(big, 325, -65, 125, 30);
+      this.ctx.rotate(90*Math.PI/180);
+      if(params.includes('Top')) this.ctx.drawImage(big, -365, -155, 125, 30);
+      this.ctx.rotate(90*Math.PI/180);
+      if(params.includes('Right')) this.ctx.drawImage(big, -455, 535, 125, 30);
+    };
+    big.src = './assets/maker/star/big.png';
+  }
+
+
   setRace(){
     let x = 44, y = 692;
     this.ctx.font = `small-caps 600 26px matrix`;
