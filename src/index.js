@@ -1,4 +1,3 @@
-import { CustomMemorama } from './components/custom-memorama.js';
-customElements.define('custom-memorama', CustomMemorama);
-import { CardMaker } from './components/card-maker.js';
-customElements.define('card-maker', CardMaker);
+import './components/custom-memorama.js';
+import './components/card-maker.js';
+import './components/custom-swiper.js';

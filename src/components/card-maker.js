@@ -8,7 +8,7 @@ export class CardMaker extends LitElement {
     }
     #card{
         border-radius: 4px;
-        max-width: 340px;
+        max-width: 320px;
         width: 100%;
         box-sizing: border-box;
       }
@@ -141,11 +141,30 @@ export class CardMaker extends LitElement {
         linkmarkers: [
             "Left",
             "Top",
-            "Right"
+            "Right",
         ],
+      }, {
+        id: 15394084,
+        name: "Nordic Beast Token",
+        type: "Token",
+        frameType: "token",
+        desc: "Special Summoned with the effect of \"Tanngrisnir of the Nordic Beasts\".",
+        atk: 0,
+        def: 0,
+        level: 3,
+        race: "Beast",
+        attribute: "EARTH",
+        archetype: "Nordic",
+      }, {
+        id: 300302069,
+        name: "Order of the Queen",
+        type: "Skill Card",
+        frameType: "skill",
+        desc: "While you control \"Amazoness Queen\", negate the effects of Effect Monsters destroyed by battle with attacking \"Amazoness\" monsters you control.",
+        race: "Tania",
       }
     ]
-    this.card = this.cards[11];
+    this.card = this.cards[4];
   }
 
   firstUpdated(){
@@ -165,8 +184,8 @@ export class CardMaker extends LitElement {
         if (['link', 'xyz', 'spell', 'trap'].includes(this.card.frameType)) this.ctx.fillStyle = "white";
         this.setNameCard();
         this.ctx.fillStyle = "black";
-        this.setAttribute();
-        if(this.card.frameType !== 'link' && this.card.frameType !== 'spell' && this.card.frameType !== 'trap') this.setLevel();
+        if (this.card.frameType !== 'skill') this.setAttribute();
+        if(this.card.frameType !== 'link' && this.card.frameType !== 'spell' && this.card.frameType !== 'trap' && this.card.frameType !== 'skill') this.setLevel();
         this.setAtkDef();
         this.setRace();
         let size = 19.5;
@@ -229,39 +248,28 @@ export class CardMaker extends LitElement {
     if(this.card.def) this.ctx.fillText(this.card.def, 500, 830);
     if(this.card.linkval) {
       this.ctx.fillText(this.card.linkval, 532, 830);
-      this.setSmallArrow(this.card.linkmarkers);
-      this.setBigArrow(this.card.linkmarkers);
+      this.setArrows(this.card.linkmarkers);
     };
   }
-  setSmallArrow(params){
-    const small = new Image();
-    small.onload = () => {
-      console.log(params, 'small');
-      if(params.includes('Bottom-Left')) this.ctx.drawImage(small, 45, 590, 60, 60);
-      this.ctx.rotate(90*Math.PI/180);
-      if(params.includes('Top-Left')) this.ctx.drawImage(small, 135, -105, 60, 60); // Top Left
-      this.ctx.rotate(90*Math.PI/180);
-      if(params.includes('Top-Right')) this.ctx.drawImage(small, -555, -195, 60, 60); // Top Right
-      this.ctx.rotate(90*Math.PI/180);
-      if(params.includes('Bottom-Right')) this.ctx.drawImage(small, -650, 495, 60, 60); // Bottom Right
-    };
-    small.src = `./assets/maker/star/small.png`;
+  setArrows(params){
+    for(let item of params){
+      let small = new Image();
+      let name = item.toLowerCase();
+      small.src = `./assets/maker/star/${name}.png`;
+      let data = {
+        'bottom-left': [45, 590, 60, 60],
+        'top-left': [45, 134, 60, 60],
+        'bottom-right': [495, 590, 60, 60],
+        'top-right': [495, 134, 60, 60],
+        'bottom': [235, 625, 125, 30],
+        'left': [35, 330, 30, 125],
+        'right': [535, 330, 30, 125],
+        'top': [235, 130, 125, 30],
+      }
+      small.onload = () => this.ctx.drawImage(small, data[name][0], data[name][1], data[name][2], data[name][3]);
+    }
+    
   }
-  setBigArrow(params){
-    const big = new Image();
-    big.onload = () => {
-      this.ctx.rotate(90*Math.PI/180);
-      if(params.includes('Bottom')) this.ctx.drawImage(big, 235, 625, 125, 30);
-      this.ctx.rotate(90*Math.PI/180);
-      if(params.includes('Left')) this.ctx.drawImage(big, 325, -65, 125, 30);
-      this.ctx.rotate(90*Math.PI/180);
-      if(params.includes('Top')) this.ctx.drawImage(big, -365, -155, 125, 30);
-      this.ctx.rotate(90*Math.PI/180);
-      if(params.includes('Right')) this.ctx.drawImage(big, -455, 535, 125, 30);
-    };
-    big.src = './assets/maker/star/big.png';
-  }
-
 
   setRace(){
     let x = 44, y = 692;
@@ -318,8 +326,18 @@ export class CardMaker extends LitElement {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  setbgtemplate(ev){
+    this.card = this.cards.filter(item=>{
+      return item.frameType === ev.detail;
+    })[0];
+    this.draw();
+  }
+
   render() {
-    return html`<canvas id="card" height="884" width="600"></canvas>`;
+    return html`
+      <div @bgtemplate=${this.setbgtemplate}><slot></slot></div>
+      <canvas id="card" height="884" width="600"></canvas>`;
   }
 
 }
+customElements.define('card-maker', CardMaker);

@@ -182,3 +182,4 @@ export class CustomMemorama extends LitElement {
         `;
     }
 }
+customElements.define('custom-memorama', CustomMemorama);
