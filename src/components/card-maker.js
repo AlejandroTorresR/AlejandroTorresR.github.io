@@ -223,13 +223,14 @@ export class CardMaker extends LitElement {
   setImageCard(){
     const img = new Image();
     img.onload = () => this.ctx.drawImage(img, 68, 160, 464, 464);
-    img.src = this.img; //`https://images.ygoprodeck.com/images/cards_cropped/${this.card.id}.jpg`;
+    img.src = this.img;
   }
   setNameCard(){
-    this.ctx.font = 'small-caps 500 46px matrix ultra-expanded';
+    this.ctx.font = 'small-caps 46px matrix ultra-expanded';
     this.ctx.fillText(this.card.name, 42, 82, 440);
   }
   setAttribute(){
+    this.card.attribute = ['spell', 'trap'].includes(this.card.frameType) ? this.card.frameType : 'LIGHT';
     const attribute = new Image();
     attribute.onload = () => this.ctx.drawImage(attribute, 504, 38, 58, 58);
     let att = this.card.attribute ? this.card.attribute.toLowerCase() : this.card.frameType;
@@ -295,6 +296,8 @@ export class CardMaker extends LitElement {
     if (['spell', 'trap'].includes(this.card.frameType)) {
       this.ctx.font = 'small-caps 600 36px matrix ultra-expanded';
       this.ctx.textAlign = 'right';
+      if(this.card.frameType === 'spell') this.card.type = 'Spell Card';
+      if(this.card.frameType === 'trap') this.card.type = 'Trap Card';
       x = 540;
       y = 136;
       if(['Quick-Play', 'Continuous', 'Ritual', 'Field', 'Equip', 'Counter'].includes(this.card.race)){
@@ -303,7 +306,7 @@ export class CardMaker extends LitElement {
       } else {
         raceText = `[${this.card.type}]`
       }
-    };
+    }
     this.ctx.fillText(raceText, x, y);
   }
   setTypeIcon(){
@@ -343,7 +346,7 @@ export class CardMaker extends LitElement {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  setbgtemplate(ev){
+  setEventTemplate(ev){
     this.card.frameType = ev.detail;
     this.draw();
   }
@@ -355,7 +358,7 @@ export class CardMaker extends LitElement {
 
   render() {
     return html`
-      <div @bgtemplate=${this.setbgtemplate} @checkinput=${this.setEventName}><slot></slot></div>
+      <div @bgtemplate=${this.setEventTemplate} @checkinput=${this.setEventName}><slot></slot></div>
       <canvas id="card" height="884" width="600"></canvas>`;
   }
 

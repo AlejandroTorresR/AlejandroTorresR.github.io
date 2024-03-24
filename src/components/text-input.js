@@ -166,13 +166,11 @@ export class TextInput extends LitElement {
     }
 
     closeInput(){
-        console.log('close');
         this.close = false;
         this.dispatchCustomEvent('checkinput', this.text)
         this.requestUpdate()
     }
     openInput(){
-        console.log('open');
         this.close = true;
         this.requestUpdate()
     }
@@ -194,7 +192,7 @@ export class TextInput extends LitElement {
         return html`
         <div class="circle-container ${this.close ? '' : 'show'}">
             <div class="item" @click="${this.openInput}">
-                <img src="https://www.kirupa.com/images/orange.png" />
+                
             </div>
             <div class="circle" style="animation-delay: 0s"></div>
             <div class="circle" style="animation-delay: 1s"></div>
