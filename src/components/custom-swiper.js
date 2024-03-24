@@ -128,13 +128,17 @@ export class CustomSwiper extends LitElement {
     _checkIndex() {
         this.swiperEl.on('slideChange', (res) => {
             //console.log(this.swiperEl.realIndex, 'real');
-            const options = {
-                detail: this.slides[res.activeIndex],
-                bubbles: true,
-                composed: true,
-              };
-            this.dispatchEvent(new CustomEvent('bgtemplate', options));
+            this.dispatchCustomEvent('bgtemplate', this.slides[res.activeIndex])
         });
+    }
+
+    dispatchCustomEvent(event, detail){
+        const options = {
+            detail: detail,
+            bubbles: true,
+            composed: true,
+          };
+        this.dispatchEvent(new CustomEvent(event, options));
     }
 
     createSwiper() {

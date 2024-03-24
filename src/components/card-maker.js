@@ -18,6 +18,7 @@ export class CardMaker extends LitElement {
     isEditable: { type: Boolean },
     ctx: { type: Object },
     card: { type: Object },
+    img: { type: String },
   };
 
   constructor() {
@@ -164,7 +165,19 @@ export class CardMaker extends LitElement {
         race: "Tania",
       }
     ]
-    this.card = this.cards[4];
+    //this.card = this.cards[4];
+    this.card = {
+      id: '89631139',
+      attribute: 'LIGHT',
+      name: 'Card Name',
+      desc: "Write a description.",
+      race: 'Dragon',
+      level: 1,
+      atk: 0,
+      def: 0,
+      frameType: "normal",
+    }
+    this.img = './assets/img/duelist.svg';
   }
 
   firstUpdated(){
@@ -210,7 +223,7 @@ export class CardMaker extends LitElement {
   setImageCard(){
     const img = new Image();
     img.onload = () => this.ctx.drawImage(img, 68, 160, 464, 464);
-    img.src = `https://images.ygoprodeck.com/images/cards_cropped/${this.card.id}.jpg` //`./assets/${this.card.id}.jpg`;
+    img.src = this.img; //`https://images.ygoprodeck.com/images/cards_cropped/${this.card.id}.jpg`;
   }
   setNameCard(){
     this.ctx.font = 'small-caps 500 46px matrix ultra-expanded';
@@ -244,9 +257,13 @@ export class CardMaker extends LitElement {
   }
   setAtkDef(){
     this.ctx.font = `small-caps 600 26px matrix`;
-    if(this.card.atk) this.ctx.fillText(this.card.atk, 380, 830);
-    if(this.card.def) this.ctx.fillText(this.card.def, 500, 830);
-    if(this.card.linkval) {
+    if(this.card.frameType !== 'spell' && this.card.frameType !== 'trap' && this.card.frameType !== 'skill') this.ctx.fillText(this.card.atk, 380, 830);
+    if(this.card.frameType !== 'spell' && this.card.frameType !== 'trap' && this.card.frameType !== 'skill' && this.card.frameType !== 'link') this.ctx.fillText(this.card.def, 500, 830);
+    if(this.card.frameType === 'link') {
+      if(!this.card.linkval) {
+        this.card.linkval = 0;
+        this.card.linkmarkers = []
+      }
       this.ctx.fillText(this.card.linkval, 532, 830);
       this.setArrows(this.card.linkmarkers);
     };
@@ -327,15 +344,18 @@ export class CardMaker extends LitElement {
   }
 
   setbgtemplate(ev){
-    this.card = this.cards.filter(item=>{
-      return item.frameType === ev.detail;
-    })[0];
+    this.card.frameType = ev.detail;
+    this.draw();
+  }
+
+  setEventName(ev){
+    this.card.name = ev.detail;
     this.draw();
   }
 
   render() {
     return html`
-      <div @bgtemplate=${this.setbgtemplate}><slot></slot></div>
+      <div @bgtemplate=${this.setbgtemplate} @checkinput=${this.setEventName}><slot></slot></div>
       <canvas id="card" height="884" width="600"></canvas>`;
   }
 

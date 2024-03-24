@@ -22,11 +22,12 @@ export class TextInput extends LitElement {
     static get styles() {
         return css`
             .wrapper{
-                display: none;
+                visibility: hidden;
+                display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                background: rgba(0,0,0,.9);
+                background: rgba(0,0,0, 0);
                 width: 100%;
                 height: 100%;
                 position: absolute;
@@ -35,12 +36,20 @@ export class TextInput extends LitElement {
                 margin: 0;
                 padding: 0;
                 z-index: 1;
+                transition: all .3s ease-in;
             }
             .wrapper.open{
-                display: flex;
+                visibility: visible;
+                background: rgba(0,0,0,.9);
+                transition: all .3s ease-in;
+            }
+            .open textarea{
+                width: 100%;
+                opacity: 1;
+                transition: all .7s ease-in;
             }
             textarea{
-                width: 100%;
+                width: 10%;
                 max-width: 320px;
                 max-height: 280px;
                 border-radius: 4px;
@@ -48,6 +57,7 @@ export class TextInput extends LitElement {
                 resize: none;
                 font-size: 1.3rem;
                 border: none;
+                opacity: 0;
             }
             .length{
                 color: white;
@@ -69,6 +79,14 @@ export class TextInput extends LitElement {
                 z-index: 2;
               }
               
+              .open .close-container .leftright{
+                transform: rotate(45deg);
+                transition: all .2s ease-in;
+              }
+              .open .close-container .rightleft{
+                transform: rotate(-45deg);
+                transition: all .2s ease-in;
+              }
               .leftright{
                 height: 4px;
                 width: 40px;
@@ -76,7 +94,7 @@ export class TextInput extends LitElement {
                 margin-top: 24px;
                 background-color: white;
                 border-radius: 2px;
-                transform: rotate(45deg);
+                transform: rotate(0deg);
                 transition: all .3s ease-in;
               }
               
@@ -87,12 +105,55 @@ export class TextInput extends LitElement {
                 margin-top: 24px;
                 background-color: white;
                 border-radius: 2px;
-                transform: rotate(-45deg);
+                transform: rotate(0deg);
                 transition: all .3s ease-in;
               }
               .btn-check{
                 cursor: pointer;
                 margin: 8px;
+              }
+              
+              .circle-container {
+                width: 80px;
+                height: 80px;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                position: absolute;
+              }
+              .show{
+                display: flex;
+              }
+           
+              .circle {
+                border-radius: 50%;
+                background-color: deepskyblue;
+                width: 50px;
+                height: 50px;
+                position: absolute;
+                opacity: 0;
+                animation: scaleIn 4s infinite cubic-bezier(.36, .11, .89, .32);
+              }
+           
+              .item {
+                z-index: 1;
+                padding: 5px;
+                cursor: pointer;
+              }
+           
+              .item img {
+                width: 50px;
+              }
+              @keyframes scaleIn {
+                from {
+                  transform: scale(.5, .5);
+                  opacity: .5;
+                }
+                to {
+                  transform: scale(2.5, 2.5);
+                  opacity: 0;
+                }
               }
         `;
     }
@@ -102,12 +163,17 @@ export class TextInput extends LitElement {
         this.text = '';
         this.maxlength = 30;
         this.rows = 2;
-        this.close = true;
     }
 
     closeInput(){
-        console.log('close')
+        console.log('close');
         this.close = false;
+        this.dispatchCustomEvent('checkinput', this.text)
+        this.requestUpdate()
+    }
+    openInput(){
+        console.log('open');
+        this.close = true;
         this.requestUpdate()
     }
 
@@ -115,8 +181,27 @@ export class TextInput extends LitElement {
         this.text = ev.target.value;
     }
 
+    dispatchCustomEvent(event, detail){
+        const options = {
+            detail: detail,
+            bubbles: true,
+            composed: true,
+          };
+        this.dispatchEvent(new CustomEvent(event, options));
+    }
+
     render() {
-        return html`        
+        return html`
+        <div class="circle-container ${this.close ? '' : 'show'}">
+            <div class="item" @click="${this.openInput}">
+                <img src="https://www.kirupa.com/images/orange.png" />
+            </div>
+            <div class="circle" style="animation-delay: 0s"></div>
+            <div class="circle" style="animation-delay: 1s"></div>
+            <div class="circle" style="animation-delay: 2s"></div>
+            <div class="circle" style="animation-delay: 3s"></div>
+        </div>
+        
         <div class="wrapper ${this.close ? 'open' : ''}">
             <div class="close-container" @click="${this.closeInput}">
                 <div class="leftright"></div>
