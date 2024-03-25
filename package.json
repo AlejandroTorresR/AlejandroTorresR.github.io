@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/AlejandroTorresR/AlejandroTorresR.github.io#readme",
   "dependencies": {
+    "@material/mwc-slider": "^0.27.0",
+    "@material/mwc-textarea": "^0.27.0",
+    "@material/mwc-textfield": "^0.27.0",
     "aframe": "^1.5.0",
     "aframe-event-set-component": "^5.0.0",
     "lit": "^3.1.2",

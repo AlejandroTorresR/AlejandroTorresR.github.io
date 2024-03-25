@@ -194,7 +194,7 @@ export class CardMaker extends LitElement {
       bg.onload = () => {
 
         this.ctx.drawImage(bg, 0, 0, 600, 884);
-        if (['link', 'xyz', 'spell', 'trap'].includes(this.card.frameType)) this.ctx.fillStyle = "white";
+        if (['link', 'xyz', 'spell', 'trap', 'skill'].includes(this.card.frameType)) this.ctx.fillStyle = "white";
         this.setNameCard();
         this.ctx.fillStyle = "black";
         if (this.card.frameType !== 'skill') this.setAttribute();
@@ -245,13 +245,13 @@ export class CardMaker extends LitElement {
     if(this.card.frameType === 'xyz'){
       frameType = {
         src: './assets/maker/star/Xyz.png',
-        x: 50
+        x: 70
       }
     }
     level.onload = () => {
       for(let i of [...Array(this.card.level)]){
-        this.ctx.drawImage(level, frameType.x, 104, 40, 40);
-        this.card.frameType === 'xyz' ? frameType.x += 44 : frameType.x -= 44;
+        this.ctx.drawImage(level, frameType.x, 106, 36, 36);
+        this.card.frameType === 'xyz' ? frameType.x += 38 : frameType.x -= 38;
       }
     };
     level.src = frameType.src;
@@ -288,11 +288,11 @@ export class CardMaker extends LitElement {
     }
     
   }
-
   setRace(){
     let x = 44, y = 692;
     this.ctx.font = `small-caps 600 26px matrix`;
-    let raceText = this.card.frameType === 'normal' || this.card.frameType === 'effect' ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`
+    let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`
+    //let raceText = this.card.frameType === 'normal' || this.card.frameType === 'effect' ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`
     if (['spell', 'trap'].includes(this.card.frameType)) {
       this.ctx.font = 'small-caps 600 36px matrix ultra-expanded';
       this.ctx.textAlign = 'right';
@@ -352,9 +352,11 @@ export class CardMaker extends LitElement {
   }
 
   setEventName(ev){
-    //this.card.name = ev.detail;
     this.card.name = ev.detail.name;
     this.card.desc = ev.detail.desc;
+    this.card.atk = ev.detail.atk;
+    this.card.def = ev.detail.def;
+    this.card.level = ev.detail.level;
     this.draw();
   }
 
