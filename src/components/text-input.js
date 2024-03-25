@@ -2,25 +2,25 @@ import { LitElement, html, css } from 'lit';
 
 export class TextInput extends LitElement {
 
-    static get properties() {
-        return {
-            text: {
-                type: String,
-            },
-            maxlength: {
-                type: Number,
-            },
-            rows: {
-                type: Number,
-            },
-            open: {
-                type: Boolean
-            }
-        }
+  static get properties() {
+    return {
+      params: {
+        type: Array,
+      },
+      maxlength: {
+        type: Number,
+      },
+      rows: {
+        type: Number,
+      },
+      open: {
+        type: Boolean
+      }
     }
+  }
 
-    static get styles() {
-        return css`
+  static get styles() {
+    return css`
             .wrapper{
                 visibility: hidden;
                 display: flex;
@@ -65,7 +65,7 @@ export class TextInput extends LitElement {
                 max-width: 320px;
                 text-align: right;
                 font-size: .8rem;
-                margin-top: 8px;
+                margin: 8px 0 16px 0;
                 opacity: .5;
             }
 
@@ -120,125 +120,113 @@ export class TextInput extends LitElement {
                 position: relative;
             }
 
-            .container-name {
-                position: absolute;
-                top: 16px;
-                left: 16px;
-              }
-            .container-descrption {
-                position: absolute;
-                bottom: 106px;
-                left: 16px;
-             }
              .show{
               display: flex;
               visibility: visible;
             }
             .circle {
-                border-radius: 50%;
-                background-color: deepskyblue;
-                width: 50px;
-                height: 50px;
-                position: absolute;
+              border-radius: 50%;
+              background-color: deepskyblue;
+              width: 50px;
+              height: 50px;
+              position: absolute;
+              opacity: 0;
+              animation: scaleIn 4s infinite cubic-bezier(.36, .11, .89, .32);
+            }
+            .item {
+              z-index: 1;
+              padding: 5px;
+              width: 48px;
+              height: 48px;
+              position: absolute;
+              cursor: pointer;
+            }
+          
+            .item img {
+              width: 50px;
+            }
+            @keyframes scaleIn {
+              from {
+                transform: scale(.5, .5);
+                opacity: .5;
+              }
+              to {
+                transform: scale(2.5, 2.5);
                 opacity: 0;
-                animation: scaleIn 4s infinite cubic-bezier(.36, .11, .89, .32);
               }
-           
-              .item {
-                z-index: 1;
-                padding: 5px;
-                width: 48px;
-                height: 48px;
-                position: absolute;
-                cursor: pointer;
-              }
-           
-              .item img {
-                width: 50px;
-              }
-              @keyframes scaleIn {
-                from {
-                  transform: scale(.5, .5);
-                  opacity: .5;
-                }
-                to {
-                  transform: scale(2.5, 2.5);
-                  opacity: 0;
-                }
-              }
-              
+            }
         `;
-    }
+  }
 
-    constructor() {
-        super();
-        this.text = '';
-        this.maxlength = 30;
-        this.rows = 2;
+  constructor() {
+    super();
+    this.params = {
+      name: '',
+      desc: ''
     }
+    this.maxlength = 30;
+    this.rows = 2;
+  }
 
-    closeInput(){
-        this.close = false;
-        this.dispatchCustomEvent('checkinput', this.text)
-        this.requestUpdate()
-    }
-    openInput(){
-        this.close = true;
-        this.requestUpdate()
-    }
+  closeInput() {
+    this.close = false;
+    this.dispatchCustomEvent('checkinput', this.params)
+    this.requestUpdate()
+  }
+  openInput() {
+    this.close = true;
+    this.requestUpdate();
+  }
 
-    checkInput(ev){
-        this.text = ev.target.value;
-    }
+  checkInput(ev) {
+    this.params.name = ev.target.value;
+    this.requestUpdate();
+  }
+  checkInputDesc(ev){
+    this.params.desc = ev.target.value;
+    this.requestUpdate();
+  }
 
-    dispatchCustomEvent(event, detail){
-        const options = {
-            detail: detail,
-            bubbles: true,
-            composed: true,
-          };
-        this.dispatchEvent(new CustomEvent(event, options));
-    }
+  dispatchCustomEvent(event, detail) {
+    const options = {
+      detail: detail,
+      bubbles: true,
+      composed: true,
+    };
+    this.dispatchEvent(new CustomEvent(event, options));
+  }
 
-    render() {
-        return html`
-        <div class="wrapper ${this.close ? '' : 'show'}">
-          <div class="container">
-              <div class="container-name">
-                  <div class="item" @click="${this.openInput}"></div>
-                  <div class="circle" style="animation-delay: 0s"></div>
-                  <div class="circle" style="animation-delay: 1s"></div>
-                  <div class="circle" style="animation-delay: 2s"></div>
-                  <div class="circle" style="animation-delay: 3s"></div>
-              </div>
-              <div class="container-descrption">
-                  <div class="item" @click="${this.openInput}"></div>
-                  <div class="circle" style="animation-delay: 0s"></div>
-                  <div class="circle" style="animation-delay: 1s"></div>
-                  <div class="circle" style="animation-delay: 2s"></div>
-                  <div class="circle" style="animation-delay: 3s"></div>
-              </div>
-              <img src="./assets/maker/bgs/normal.png" width="100%" style="visibility: hidden" />
-          </div>
+  render() {
+    return html`    
+        <div class="container">
+            <div class="item" @click="${this.openInput}"></div>
+            <div class="circle" style="animation-delay: 0s"></div>
+            <div class="circle" style="animation-delay: 1s"></div>
+            <div class="circle" style="animation-delay: 2s"></div>
+            <div class="circle" style="animation-delay: 3s"></div>
         </div>
-        
         <div class="wrapper ${this.close ? 'open' : ''}">
             <div class="close-container" @click="${this.closeInput}">
                 <div class="leftright"></div>
                 <div class="rightleft"></div>
             </div>
-            <textarea name="textarea" 
-                @input="${this.checkInput}"
+            <textarea @input="${this.checkInput}"
                 rows="${this.rows}" 
-                placeholder="..."
-                maxlength="${this.maxlength}">${this.text}</textarea>
-            <div class="length">${this.text.length}/${this.maxlength}</div>
+                placeholder="Card Name"
+                maxlength="${this.maxlength}">${this.params.name}</textarea>
+            <div class="length">${this.params.name.length}/${this.maxlength}</div>
+
+            <textarea @input="${this.checkInputDesc}"
+                rows="5" 
+                placeholder="Write a description"
+                maxlength="200">${this.params.desc}</textarea>
+            <div class="length">${this.params.desc.length}/200</div>
 
             <div class="btn-check" @click="${this.closeInput}">
                 <svg height="48px" width="48px" fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-171.5 -171.5 833.00 833.00" xml:space="preserve" transform="rotate(0)" stroke="#ffffff" stroke-width="3.9200000000000004"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(0,0), scale(1)"><rect x="-171.5" y="-171.5" width="833.00" height="833.00" rx="416.5" fill="#00cd60" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.9800000000000001"></g><g id="SVGRepo_iconCarrier"> <polygon points="452.253,28.326 197.831,394.674 29.044,256.875 0,292.469 207.253,461.674 490,54.528 "></polygon> </g></svg>
             </div>
         </div>
         `;
-    }
+  }
 }
 customElements.define('text-input', TextInput);

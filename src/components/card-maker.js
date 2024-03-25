@@ -352,7 +352,9 @@ export class CardMaker extends LitElement {
   }
 
   setEventName(ev){
-    this.card.name = ev.detail;
+    //this.card.name = ev.detail;
+    this.card.name = ev.detail.name;
+    this.card.desc = ev.detail.desc;
     this.draw();
   }
 
