@@ -80,6 +80,10 @@ export class CustomSwiper extends LitElement {
             coverflowEffectModifier: '1',
             coverflowEffectSlideShadows: 'true', */
             breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                    spaceBetween: 200,
+                  },
                 320: {
                     slidesPerView: 2,
                     spaceBetween: 280,

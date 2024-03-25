@@ -29,7 +29,7 @@ export class TextInput extends LitElement {
                 align-items: center;
                 background: rgba(0,0,0, 0);
                 width: 100%;
-                height: 100%;
+                height: 100vh;
                 position: absolute;
                 left: 0;
                 top: 0;
@@ -112,21 +112,29 @@ export class TextInput extends LitElement {
                 cursor: pointer;
                 margin: 8px;
               }
-              
-              .circle-container {
-                width: 80px;
-                height: 80px;
-                display: none;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
+
+              .container{
+                width: 100%;
+                max-width: 340px;
+                margin-top: 58px;
+                position: relative;
+            }
+
+            .container-name {
                 position: absolute;
+                top: 16px;
+                left: 16px;
               }
-              .show{
-                display: flex;
-              }
-           
-              .circle {
+            .container-descrption {
+                position: absolute;
+                bottom: 106px;
+                left: 16px;
+             }
+             .show{
+              display: flex;
+              visibility: visible;
+            }
+            .circle {
                 border-radius: 50%;
                 background-color: deepskyblue;
                 width: 50px;
@@ -139,6 +147,9 @@ export class TextInput extends LitElement {
               .item {
                 z-index: 1;
                 padding: 5px;
+                width: 48px;
+                height: 48px;
+                position: absolute;
                 cursor: pointer;
               }
            
@@ -155,6 +166,7 @@ export class TextInput extends LitElement {
                   opacity: 0;
                 }
               }
+              
         `;
     }
 
@@ -190,14 +202,24 @@ export class TextInput extends LitElement {
 
     render() {
         return html`
-        <div class="circle-container ${this.close ? '' : 'show'}">
-            <div class="item" @click="${this.openInput}">
-                
-            </div>
-            <div class="circle" style="animation-delay: 0s"></div>
-            <div class="circle" style="animation-delay: 1s"></div>
-            <div class="circle" style="animation-delay: 2s"></div>
-            <div class="circle" style="animation-delay: 3s"></div>
+        <div class="wrapper ${this.close ? '' : 'show'}">
+          <div class="container">
+              <div class="container-name">
+                  <div class="item" @click="${this.openInput}"></div>
+                  <div class="circle" style="animation-delay: 0s"></div>
+                  <div class="circle" style="animation-delay: 1s"></div>
+                  <div class="circle" style="animation-delay: 2s"></div>
+                  <div class="circle" style="animation-delay: 3s"></div>
+              </div>
+              <div class="container-descrption">
+                  <div class="item" @click="${this.openInput}"></div>
+                  <div class="circle" style="animation-delay: 0s"></div>
+                  <div class="circle" style="animation-delay: 1s"></div>
+                  <div class="circle" style="animation-delay: 2s"></div>
+                  <div class="circle" style="animation-delay: 3s"></div>
+              </div>
+              <img src="./assets/maker/bgs/normal.png" width="100%" style="visibility: hidden" />
+          </div>
         </div>
         
         <div class="wrapper ${this.close ? 'open' : ''}">
