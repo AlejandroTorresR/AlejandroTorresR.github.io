@@ -11,6 +11,7 @@ export class CardMaker extends LitElement {
         max-width: 320px;
         width: 100%;
         box-sizing: border-box;
+        z-index: 1;
       }
   `;
 
@@ -34,7 +35,7 @@ export class CardMaker extends LitElement {
         atk: 2000,
         def: 1700,
         frameType: "effect",
-    }, {
+      }, {
         id: '73580471',
         attribute: 'FIRE',
         name: 'Black Rose Dragon',
@@ -208,7 +209,7 @@ export class CardMaker extends LitElement {
         if (['spell', 'trap'].includes(this.card.frameType)) y = 694;
         this.setDescription(this.ctx, this.card.desc, 44, y, size, 512, `${size}px matrix`);
       };
-      this.setImageCard();
+      this.setImageCard({detail: this.img});
       bg.src = `./assets/maker/bgs/${this.card.frameType}.png`;
     }
   }
@@ -220,10 +221,11 @@ export class CardMaker extends LitElement {
     return (num < 0) ? -firstDigitUnsigned : firstDigitUnsigned;
   }
 
-  setImageCard(){
+  setImageCard(ev){
+    console.log(ev.detail)
     const img = new Image();
     img.onload = () => this.ctx.drawImage(img, 68, 160, 464, 464);
-    img.src = this.img;
+    img.src = ev.detail;
   }
   setNameCard(){
     this.ctx.font = 'small-caps 46px matrix ultra-expanded';
@@ -291,8 +293,7 @@ export class CardMaker extends LitElement {
   setRace(){
     let x = 44, y = 692;
     this.ctx.font = `small-caps 600 26px matrix`;
-    let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`
-    //let raceText = this.card.frameType === 'normal' || this.card.frameType === 'effect' ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`
+    let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`;
     if (['spell', 'trap'].includes(this.card.frameType)) {
       this.ctx.font = 'small-caps 600 36px matrix ultra-expanded';
       this.ctx.textAlign = 'right';
@@ -351,7 +352,7 @@ export class CardMaker extends LitElement {
     this.draw();
   }
 
-  setEventName(ev){
+  setEventParams(ev){
     this.card.name = ev.detail.name;
     this.card.desc = ev.detail.desc;
     this.card.atk = ev.detail.atk;
@@ -360,9 +361,14 @@ export class CardMaker extends LitElement {
     this.draw();
   }
 
+  setEventCard(ev){
+    this.img = ev.detail;
+    this.draw();
+  }
+
   render() {
     return html`
-      <div @bgtemplate=${this.setEventTemplate} @checkinput=${this.setEventName}><slot></slot></div>
+      <div @bgtemplate=${this.setEventTemplate} @checkinput=${this.setEventParams} @opencrop="${this.setEventCard}"><slot></slot></div>
       <canvas id="card" height="884" width="600"></canvas>`;
   }
 

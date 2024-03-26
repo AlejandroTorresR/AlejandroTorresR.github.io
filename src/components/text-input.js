@@ -16,16 +16,22 @@ export class TextInput extends LitElement {
         type: Number,
       },
       open: {
-        type: Boolean
-      }
+        type: Boolean,
+      },
+      myImage: {
+        type: Object,
+      },
     }
   }
 
   static get styles() {
     return css`
+            .hidden{ display: none;}
             .text-center{ text-align: center; }
             .w-100{ width: 100%; }
             .d-flex{ display: flex; }
+            .content-start{ justify-content: start; align-items: center; }
+            .content-end{ justify-content: end; align-items: center; }
             .ml{ margin-left: 4px;}
             .mr{ margin-right: 4px;}
             .wrapper{
@@ -169,6 +175,21 @@ export class TextInput extends LitElement {
     this.requestUpdate();
   }
 
+  openFile(){
+    let img = this.shadowRoot.getElementById('img');
+    img.click();
+  }
+  openCrop(e){
+    if(e.target.files[0].size){
+      let reader = new FileReader;
+      reader.onload = (ev) => {
+        this.myImage = ev.target.result;
+        this.dispatchCustomEvent('opencrop', ev.target.result)
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
+
   checkInput(ev, name) {
     this.params[name] = ev.target.value;
     this.requestUpdate();
@@ -184,14 +205,22 @@ export class TextInput extends LitElement {
   }
 
   render() {
-    return html`    
-        <div class="container">
+    return html`
+        <div class="d-flex content-start">
+            <div class="item" @click="${this.openFile}"></div>
+            <div class="circle" style="animation-delay: 0s"></div>
+            <div class="circle" style="animation-delay: 1s"></div>
+            <div class="circle" style="animation-delay: 2s"></div>
+            <div class="circle" style="animation-delay: 3s"></div>
+        </div>
+        <div class="d-flex content-end">
             <div class="item" @click="${this.openInput}"></div>
             <div class="circle" style="animation-delay: 0s"></div>
             <div class="circle" style="animation-delay: 1s"></div>
             <div class="circle" style="animation-delay: 2s"></div>
             <div class="circle" style="animation-delay: 3s"></div>
         </div>
+        <input id="img" class="hidden" type="file" #banner @change="${this.openCrop}" accept="image/jpeg, image/jpg, image/png" />
         <div class="wrapper d-flex ${this.close ? 'open' : ''}">
             <div class="close-container" @click="${this.closeInput}">
                 <div class="leftright"></div>
