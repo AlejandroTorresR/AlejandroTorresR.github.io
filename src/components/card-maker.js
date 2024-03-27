@@ -207,7 +207,7 @@ export class CardMaker extends LitElement {
         if(this.card.frameType === 'link') size -= 3;
         let y = 716;
         if (['spell', 'trap'].includes(this.card.frameType)) y = 694;
-        this.setDescription(this.ctx, this.card.desc, 44, y, size, 512, `${size}px matrix`);
+        this.setDescription(this.ctx, this.card.desc || 'Write a description.', 44, y, size, 512, `${size}px matrix`);
       };
       this.setImageCard({detail: this.img});
       bg.src = `./assets/maker/bgs/${this.card.frameType}.png`;
@@ -228,7 +228,7 @@ export class CardMaker extends LitElement {
   }
   setNameCard(){
     this.ctx.font = 'small-caps 46px matrix ultra-expanded';
-    this.ctx.fillText(this.card.name, 42, 82, 440);
+    this.ctx.fillText(this.card.name || 'Card Name', 42, 82, 440);
   }
   setAttribute(){
     this.card.attribute = ['spell', 'trap'].includes(this.card.frameType) ? this.card.frameType : 'LIGHT';

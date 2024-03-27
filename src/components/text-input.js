@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import '@material/mwc-textfield/mwc-textfield.js';
 import '@material/mwc-textarea/mwc-textarea.js';
 import '@material/mwc-slider/slider.js';
+import '@material/mwc-icon/mwc-icon.js';
 export class TextInput extends LitElement {
 
   static get properties() {
@@ -30,10 +31,12 @@ export class TextInput extends LitElement {
             .text-center{ text-align: center; }
             .w-100{ width: 100%; }
             .d-flex{ display: flex; }
+            .content-center{ justify-content: center; align-items: center; }
             .content-start{ justify-content: start; align-items: center; }
             .content-end{ justify-content: end; align-items: center; }
             .ml{ margin-left: 4px;}
             .mr{ margin-right: 4px;}
+            .mb-16{ margin-bottom: 16px;}
             .wrapper{
                 visibility: hidden;
                 flex-direction: column;
@@ -129,11 +132,11 @@ export class TextInput extends LitElement {
             }
             .item {
               z-index: 1;
-              padding: 5px;
               width: 48px;
               height: 48px;
               position: absolute;
               cursor: pointer;
+              color: white;
             }
           
             .item img {
@@ -180,11 +183,11 @@ export class TextInput extends LitElement {
     img.click();
   }
   openCrop(e){
-    if(e.target.files[0].size){
+    if(e.target.files[0] && e.target.files[0].size){
       let reader = new FileReader;
       reader.onload = (ev) => {
         this.myImage = ev.target.result;
-        this.dispatchCustomEvent('opencrop', ev.target.result)
+        this.dispatchCustomEvent('opencrop', ev.target.result);
       }
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -206,15 +209,19 @@ export class TextInput extends LitElement {
 
   render() {
     return html`
-        <div class="d-flex content-start">
-            <div class="item" @click="${this.openFile}"></div>
+        <div class="d-flex content-end">
+            <div class="item d-flex content-center" @click="${this.openFile}">
+              <mwc-icon>image</mwc-icon>
+            </div>
             <div class="circle" style="animation-delay: 0s"></div>
             <div class="circle" style="animation-delay: 1s"></div>
             <div class="circle" style="animation-delay: 2s"></div>
             <div class="circle" style="animation-delay: 3s"></div>
         </div>
-        <div class="d-flex content-end">
-            <div class="item" @click="${this.openInput}"></div>
+        <div class="d-flex content-start">
+            <div class="item d-flex content-center" @click="${this.openInput}">
+              <mwc-icon>edit</mwc-icon>
+            </div>
             <div class="circle" style="animation-delay: 0s"></div>
             <div class="circle" style="animation-delay: 1s"></div>
             <div class="circle" style="animation-delay: 2s"></div>
@@ -228,8 +235,12 @@ export class TextInput extends LitElement {
             </div>
 
             <div class="container">
+              <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'name')}" class="w-100" label="Card Name" maxLength="${this.maxlength}"  value="${this.params.name}"></mwc-textfield>
+              <div class="length">${this.params.name.length}/${this.maxlength}</div>
+
               <mwc-slider
                   @input="${(ev)=> this.checkInput(ev, 'level')}"
+                  class="mb-16"
                   discrete
                   withTickMarks
                   step="1"
@@ -237,9 +248,6 @@ export class TextInput extends LitElement {
                   max="12"
                   value="${this.params.level}">
               </mwc-slider>
-
-              <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'name')}" class="w-100" label="Card Name" maxLength="${this.maxlength}"  value="${this.params.name}"></mwc-textfield>
-              <div class="length">${this.params.name.length}/${this.maxlength}</div>
 
               <mwc-textarea @input="${(ev)=> this.checkInput(ev, 'desc')}"
                   class="w-100"
