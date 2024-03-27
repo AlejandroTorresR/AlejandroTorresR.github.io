@@ -39,5 +39,16 @@ module.exports = {
             directory: path.join(__dirname, 'docs'),
           },
         open: true
-    }
+    },
+    module: {
+        rules: [
+          {
+            test: /\.css$/,
+            loader: 'lit-css-loader',
+            options: {
+              specifier: 'lit-element' // defaults to `lit`
+            }
+          }
+        ]
+      }
 };

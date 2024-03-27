@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 
 export class CardMaker extends LitElement {
   static styles = css`
@@ -222,7 +222,6 @@ export class CardMaker extends LitElement {
   }
 
   setImageCard(ev){
-    console.log(ev.detail)
     const img = new Image();
     img.onload = () => this.ctx.drawImage(img, 68, 160, 464, 464);
     img.src = ev.detail;
@@ -368,7 +367,7 @@ export class CardMaker extends LitElement {
 
   render() {
     return html`
-      <div @bgtemplate=${this.setEventTemplate} @checkinput=${this.setEventParams} @opencrop="${this.setEventCard}"><slot></slot></div>
+      <div @bgtemplate=${this.setEventTemplate} @checkinput=${this.setEventParams} @croppedevent="${this.setEventCard}"><slot></slot></div>
       <canvas id="card" height="884" width="600"></canvas>`;
   }
 

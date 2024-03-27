@@ -1,6 +1,6 @@
-import { LitElement, html, css } from 'lit-element';
-//import Swiper, { Mousewheel, EffectCoverflow } from 'swiper';
+import { LitElement, html, css } from 'lit';
 import { Swiper } from 'swiper';
+import { EffectCoverflow } from 'swiper/modules';
 
 export class CustomSwiper extends LitElement {
 
@@ -61,17 +61,11 @@ export class CustomSwiper extends LitElement {
             'skill'
         ]
         this.swiperOptions = {
-            //modules: [Mousewheel, EffectCoverflow],
-            mousewheel: {
-                forceToAxis: true,
-            },
-            pagination: {
-                clickable: true,
-            },
+            modules: [EffectCoverflow],
             centeredSlides: 'true',
             //direction: 'vertical',
-            effect: 'coverflow',
-            initialSlide: 0,
+            //effect: 'coverflow',
+            //initialSlide: 0,
             loop: false,
             slidesPerView: 3,
             /* coverflowEffectRotate: '50',
