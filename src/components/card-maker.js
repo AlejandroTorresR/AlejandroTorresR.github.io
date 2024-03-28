@@ -182,7 +182,15 @@ export class CardMaker extends LitElement {
   }
 
   firstUpdated(){
+    this.matrixFont();
     this.draw();
+  }
+
+  matrixFont(){
+    const myFont = new FontFace('matrix', 'url(../assets/fonts/matrix.ttf)');
+    myFont.load().then((font) => {
+      document.fonts.add(font);
+    });
   }
 
   draw() {
@@ -190,7 +198,6 @@ export class CardMaker extends LitElement {
     if (canvas.getContext) {
       this.ctx = canvas.getContext("2d");
       this.ctx.textRendering = "geometricPrecision";
-      this.ctx.font = '11px matrix';
       const bg = new Image();
       bg.onload = () => {
 
@@ -227,7 +234,7 @@ export class CardMaker extends LitElement {
     img.src = ev.detail;
   }
   setNameCard(){
-    this.ctx.font = 'small-caps 46px matrix ultra-expanded';
+    this.ctx.font = 'small-caps 46px matrix'; //'ultra-expanded';
     this.ctx.fillText(this.card.name || 'Card Name', 42, 82, 440);
   }
   setAttribute(){
@@ -294,7 +301,7 @@ export class CardMaker extends LitElement {
     this.ctx.font = `small-caps 600 26px matrix`;
     let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`;
     if (['spell', 'trap'].includes(this.card.frameType)) {
-      this.ctx.font = 'small-caps 600 36px matrix ultra-expanded';
+      this.ctx.font = 'small-caps 600 36px matrix'; //ultra-expanded
       this.ctx.textAlign = 'right';
       if(this.card.frameType === 'spell') this.card.type = 'Spell Card';
       if(this.card.frameType === 'trap') this.card.type = 'Trap Card';

@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { Swiper } from 'swiper';
-import { EffectCoverflow } from 'swiper/modules';
+import { EffectCoverflow, EffectCards, EffectCube } from 'swiper/modules';
+import 'swiper/css';
 
 export class CustomSwiper extends LitElement {
 
@@ -30,11 +31,11 @@ export class CustomSwiper extends LitElement {
       align-items: center;
       justify-content: center;
       opacity: 1;
+      transition: all 1s;
     }
     .swiper-slide-active{
-      transition: all .5s;
+      transition: all 1s;
       opacity: 0;
-      background: rgba(0,255,0,0);
     }
     .select-bg{
         width: 320px;
@@ -61,18 +62,22 @@ export class CustomSwiper extends LitElement {
             'skill'
         ]
         this.swiperOptions = {
-            modules: [EffectCoverflow],
+            modules: [EffectCoverflow, EffectCards, EffectCube],
             centeredSlides: 'true',
             //direction: 'vertical',
-            //effect: 'coverflow',
-            //initialSlide: 0,
+            //effect: 'cube',
+            coverflowEffect: {
+                rotate: 50, // Slide rotate in degrees
+                stretch: 0, // Stretch space between slides (in px)
+                depth: 100, // Depth offset in px (slides translate in Z axis)
+                modifier: 0, // Effect multipler
+                slideShadows : true, // Enables slides shadows
+            },
+            initialSlide: 0,
             loop: false,
             slidesPerView: 3,
-            /* coverflowEffectRotate: '50',
-            coverflowEffectStretch: '0',
-            coverflowEffectDepth: '100',
-            coverflowEffectModifier: '1',
-            coverflowEffectSlideShadows: 'true', */
+            grabCursor: true,
+            keyboard: true,
             breakpoints: {
                 0: {
                     slidesPerView: 1,

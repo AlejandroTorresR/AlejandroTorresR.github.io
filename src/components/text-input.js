@@ -30,6 +30,9 @@ export class TextInput extends LitElement {
             .hidden{ display: none;}
             .text-center{ text-align: center; }
             .w-100{ width: 100%; }
+            .p-relative{ position: relative; }
+            .p-absolute{ position: absolute; }
+            .z-2 { z-index: 2; }
             .d-flex{ display: flex; }
             .content-center{ justify-content: center; align-items: center; }
             .content-start{ justify-content: start; align-items: center; }
@@ -50,7 +53,7 @@ export class TextInput extends LitElement {
                 top: 0;
                 margin: 0;
                 padding: 0;
-                z-index: 1;
+                z-index: 2;
                 transition: all .3s ease-in;
             }
             .wrapper.open{
@@ -209,7 +212,7 @@ export class TextInput extends LitElement {
 
   render() {
     return html`
-        <div class="d-flex content-end">
+        <div class="d-flex content-end p-relative z-2">
             <div class="item d-flex content-center" @click="${this.openFile}">
               <mwc-icon>image</mwc-icon>
             </div>
@@ -218,7 +221,7 @@ export class TextInput extends LitElement {
             <div class="circle" style="animation-delay: 2s"></div>
             <div class="circle" style="animation-delay: 3s"></div>
         </div>
-        <div class="d-flex content-start">
+        <div class="d-flex content-start p-relative z-2">
             <div class="item d-flex content-center" @click="${this.openInput}">
               <mwc-icon>edit</mwc-icon>
             </div>

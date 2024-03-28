@@ -1,7 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
 import Cropper from 'cropperjs';
-import Swal from 'sweetalert2';
-import { throttle } from '@github/mini-throttle';
 import cropperStyles from 'cropperjs/dist/cropper.css';
 
 export class CustomCropper extends LitElement {
