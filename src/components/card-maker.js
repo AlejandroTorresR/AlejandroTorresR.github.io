@@ -172,7 +172,7 @@ export class CardMaker extends LitElement {
       attribute: 'LIGHT',
       name: 'Card Name',
       desc: "Write a description.",
-      race: 'Dragon',
+      race: 'Aqua',
       level: 1,
       atk: 0,
       def: 0,
@@ -299,7 +299,7 @@ export class CardMaker extends LitElement {
   setRace(){
     let x = 44, y = 692;
     this.ctx.font = `small-caps 600 26px matrix`;
-    let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`;
+    let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race || 'aqua'} / ${this.capitalizeText(this.card.frameType || 'aqua')}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`;
     if (['spell', 'trap'].includes(this.card.frameType)) {
       this.ctx.font = 'small-caps 600 36px matrix'; //ultra-expanded
       this.ctx.textAlign = 'right';
@@ -364,6 +364,7 @@ export class CardMaker extends LitElement {
     this.card.atk = ev.detail.atk;
     this.card.def = ev.detail.def;
     this.card.level = ev.detail.level;
+    this.card.race = ev.detail.race;
     this.draw();
   }
 

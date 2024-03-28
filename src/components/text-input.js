@@ -3,6 +3,8 @@ import '@material/mwc-textfield/mwc-textfield.js';
 import '@material/mwc-textarea/mwc-textarea.js';
 import '@material/mwc-slider/slider.js';
 import '@material/mwc-icon/mwc-icon.js';
+import '@material/mwc-select/mwc-select.js';
+import '@material/mwc-list/mwc-list-item.js';
 export class TextInput extends LitElement {
 
   static get properties() {
@@ -10,18 +12,18 @@ export class TextInput extends LitElement {
       params: {
         type: Array,
       },
-      maxlength: {
-        type: Number,
-      },
-      rows: {
-        type: Number,
-      },
       open: {
         type: Boolean,
       },
       myImage: {
         type: Object,
       },
+      race: {
+        type: Array
+      },
+      attribute: {
+        type: Array
+      }
     }
   }
 
@@ -163,12 +165,56 @@ export class TextInput extends LitElement {
     this.params = {
       name: '',
       desc: '',
+      race: '',
       atk: 0,
       def: 0,
       level: 1
     }
-    this.maxlength = 30;
-    this.rows = 2;
+    this.spells = [
+      'Normal',
+			'Quick-Play',
+			'Continuous',
+			'Ritual',
+			'Field',
+			'Equip',
+			'Counter',
+    ]
+    this.race = [
+			'Aqua',
+			'Beast',
+			'Beast-Warrior',
+			'Creator-God',
+			'Cyberse',
+			'Dinosaur',
+			'Divine-Beast',
+			'Dragon',
+			'Fairy',
+			'Fiend',
+			'Fish',
+			'Insect',
+			'Machine',
+			'Plant',
+			'Psychic',
+			'Pyro',
+			'Reptile',
+			'Rock',
+			'Sea Serpent',
+			'Spellcaster',
+			'Thunder',
+			'Warrior',
+			'Winged Beast', 
+			'Wyrm', 
+			'Zombie',
+		]
+		this.attribute = [
+      'dark',
+      'earth',
+      'fire',
+      'divine',
+      'light',
+      'water',
+      'wind',
+		]
   }
 
   closeInput() {
@@ -197,6 +243,7 @@ export class TextInput extends LitElement {
   }
 
   checkInput(ev, name) {
+    console.log(ev, name)
     this.params[name] = ev.target.value;
     this.requestUpdate();
   }
@@ -238,8 +285,8 @@ export class TextInput extends LitElement {
             </div>
 
             <div class="container">
-              <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'name')}" class="w-100" label="Card Name" maxLength="${this.maxlength}"  value="${this.params.name}"></mwc-textfield>
-              <div class="length">${this.params.name.length}/${this.maxlength}</div>
+              <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'name')}" class="w-100" label="Card Name" maxLength="30"  value="${this.params.name}"></mwc-textfield>
+              <div class="length">${this.params.name.length}/30</div>
 
               <mwc-slider
                   @input="${(ev)=> this.checkInput(ev, 'level')}"
@@ -259,6 +306,12 @@ export class TextInput extends LitElement {
                   maxLength="300">
               </mwc-textarea>
               <div class="length">${this.params.desc.length}/200</div>
+
+              <mwc-select label="Race" class="w-100 mb-16">
+                ${this.race.map(item => html`
+                  <mwc-list-item value="${item}" @click="${(ev)=> this.checkInput(ev, 'race')}">${item}</mwc-list-item>
+                `)}
+              </mwc-select>
 
               <div class="d-flex">
                 <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'atk')}" class="w-100 mr" label="Attack" type="tel" maxLength="4" value="${this.params.atk}"></mwc-textfield>
