@@ -70,39 +70,35 @@ export class TextInput extends LitElement {
                 opacity: .5;
             }
             .close-container{
-                position: fixed;
-                right: 16px;
-                top: 16px;
-                width: 40px;
-                height: 40px;
-                cursor: pointer;
-                z-index: 2;
-              }
-              .leftright{
-                height: 4px;
-                width: 40px;
-                position: absolute;
-                margin-top: 24px;
-                background-color: white;
-                border-radius: 2px;
-                transform: rotate(45deg);
-                transition: all .3s ease-in;
-              }
-              .rightleft{
-                height: 4px;
-                width: 40px;
-                position: absolute;
-                margin-top: 24px;
-                background-color: white;
-                border-radius: 2px;
-                transform: rotate(-45deg);
-                transition: all .3s ease-in;
-              }
-              .btn-check svg{
-                cursor: pointer;
-                margin: 16px auto;
-              }
-              .container{
+              position: fixed;
+              right: 16px;
+              top: 16px;
+              width: 40px;
+              height: 40px;
+              cursor: pointer;
+              z-index: 2;
+            }
+            .leftright{
+              height: 4px;
+              width: 40px;
+              position: absolute;
+              margin-top: 24px;
+              background-color: white;
+              border-radius: 2px;
+              transform: rotate(45deg);
+              transition: all .3s ease-in;
+            }
+            .rightleft{
+              height: 4px;
+              width: 40px;
+              position: absolute;
+              margin-top: 24px;
+              background-color: white;
+              border-radius: 2px;
+              transform: rotate(-45deg);
+              transition: all .3s ease-in;
+            }
+            .container{
                 width: 100%;
                 max-width: 340px;
                 position: relative;
@@ -129,8 +125,8 @@ export class TextInput extends LitElement {
               cursor: pointer;
               color: white;
             }
-            .item img {
-              width: 50px;
+            .item:target{
+              color: white;
             }
             @keyframes scaleIn {
               from {
@@ -207,8 +203,7 @@ export class TextInput extends LitElement {
 
   closeInput() {
     this.show = false;
-    this.dispatchCustomEvent('checkinput', this.params)
-    this.requestUpdate()
+    this.dispatchCustomEvent('checkinput', this.params);
   }
   openInput() {
     this.show = true;

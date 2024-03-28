@@ -218,7 +218,7 @@ export class CardMaker extends LitElement {
         this.setRace();
         let size = 19.5;
         if(this.card.desc.length > 100) size = size - this.firstDigit(this.card.desc.length);
-        if(this.card.frameType === 'link') size -= 3;
+        //if(this.card.frameType === 'link') size -= 3;
         let y = 716;
         if (['spell', 'trap'].includes(this.card.frameType)) y = 694;
         this.setDescription(this.ctx, this.card.desc, 44, y, size, 512, `${size}px matrix`);

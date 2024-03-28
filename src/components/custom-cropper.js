@@ -28,6 +28,35 @@ export class CustomCropper extends LitElement {
       background-color: rgba(0,0,0,.9);
       z-index: 1;
     }
+    .close-container{
+      position: fixed;
+      right: 16px;
+      top: 16px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .leftright{
+      height: 4px;
+      width: 40px;
+      position: absolute;
+      margin-top: 24px;
+      background-color: white;
+      border-radius: 2px;
+      transform: rotate(45deg);
+      transition: all .3s ease-in;
+    }
+    .rightleft{
+      height: 4px;
+      width: 40px;
+      position: absolute;
+      margin-top: 24px;
+      background-color: white;
+      border-radius: 2px;
+      transform: rotate(-45deg);
+      transition: all .3s ease-in;
+    }
     `];
   }
 
@@ -53,14 +82,10 @@ export class CustomCropper extends LitElement {
         modal: true,
         guides: true,
         highlight: false,
-        autoCropArea: 0.1,
         wheelZoomRatio: 0.03,
-        autoCrop: false,
+        autoCropArea: 0.5,
+        autoCrop: true,
     }
-  }
-
-  firstUpdated(){
-    //this.createCropper();
   }
 
   updated(params){
@@ -81,6 +106,10 @@ export class CustomCropper extends LitElement {
     this.dispatchCustomEvent('croppedevent', croppedCanvas);
   }
 
+  closeInput(){
+    this.show = false;
+  }
+
   setEventCard(ev){
     this.img = ev.detail;
     this.show = true;
@@ -98,6 +127,10 @@ export class CustomCropper extends LitElement {
   render() {
     return this.show ? html`
     <div class="wrapper">
+      <div class="close-container" @click="${this.closeInput}">
+        <div class="leftright"></div>
+        <div class="rightleft"></div>
+      </div>
       <div>
           <img id="cropperjs" src="${this.img}">
       </div>
