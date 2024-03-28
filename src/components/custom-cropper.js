@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import '@material/mwc-button/mwc-button.js';
 import Cropper from 'cropperjs';
 import cropperStyles from 'cropperjs/dist/cropper.css';
 
@@ -100,7 +101,7 @@ export class CustomCropper extends LitElement {
       <div>
           <img id="cropperjs" src="${this.img}">
       </div>
-      <button @click="${this.submit}">Confirm</button>
+      <mwc-button raised label="Confirm" @click="${this.submit}"></mwc-button>
     </div>
     ` : html`<div @opencrop="${this.setEventCard}"><slot></slot></div>`;
   }

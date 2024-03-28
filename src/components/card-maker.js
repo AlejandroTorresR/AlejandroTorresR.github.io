@@ -184,6 +184,13 @@ export class CardMaker extends LitElement {
   firstUpdated(){
     this.matrixFont();
     this.draw();
+    this.getTextInput();
+  }
+
+  getTextInput(){
+    if(this.shadowRoot.ownerDocument.getElementsByTagName('custom-cropper')){
+      this.shadowRoot.ownerDocument.getElementsByTagName('custom-cropper')[0].getElementsByTagName('text-input')[0].params = this.card;
+    }
   }
 
   matrixFont(){
@@ -214,7 +221,7 @@ export class CardMaker extends LitElement {
         if(this.card.frameType === 'link') size -= 3;
         let y = 716;
         if (['spell', 'trap'].includes(this.card.frameType)) y = 694;
-        this.setDescription(this.ctx, this.card.desc || 'Write a description.', 44, y, size, 512, `${size}px matrix`);
+        this.setDescription(this.ctx, this.card.desc, 44, y, size, 512, `${size}px matrix`);
       };
       this.setImageCard({detail: this.img});
       bg.src = `./assets/maker/bgs/${this.card.frameType}.png`;
@@ -235,7 +242,7 @@ export class CardMaker extends LitElement {
   }
   setNameCard(){
     this.ctx.font = 'small-caps 46px matrix'; //'ultra-expanded';
-    this.ctx.fillText(this.card.name || 'Card Name', 42, 82, 440);
+    this.ctx.fillText(this.card.name, 42, 82, 440);
   }
   setAttribute(){
     this.card.attribute = ['spell', 'trap'].includes(this.card.frameType) ? this.card.frameType : 'LIGHT';
@@ -299,7 +306,7 @@ export class CardMaker extends LitElement {
   setRace(){
     let x = 44, y = 692;
     this.ctx.font = `small-caps 600 26px matrix`;
-    let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race || 'aqua'} / ${this.capitalizeText(this.card.frameType || 'aqua')}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`;
+    let raceText = ['normal', 'effect', 'skill'].includes(this.card.frameType) ? `[${this.card.race} / ${this.capitalizeText(this.card.frameType)}]` : `[${this.card.race} / ${this.capitalizeText(this.card.frameType)} / Effect]`;
     if (['spell', 'trap'].includes(this.card.frameType)) {
       this.ctx.font = 'small-caps 600 36px matrix'; //ultra-expanded
       this.ctx.textAlign = 'right';
@@ -308,10 +315,16 @@ export class CardMaker extends LitElement {
       x = 540;
       y = 136;
       if(['Quick-Play', 'Continuous', 'Ritual', 'Field', 'Equip', 'Counter'].includes(this.card.race)){
-        raceText = `[${this.card.type}     ]`
+        raceText = `[${this.card.type}      ]`
         this.setTypeIcon();
       } else {
         raceText = `[${this.card.type}]`
+      }
+    } else {
+      if(['Spell Card', 'Trap Card'].includes(this.card.type)) {
+        this.card.race = 'Aqua';
+        this.card.type = '';
+        this.draw();
       }
     }
     this.ctx.fillText(raceText, x, y);
