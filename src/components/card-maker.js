@@ -166,31 +166,12 @@ export class CardMaker extends LitElement {
         race: "Tania",
       }
     ]
-    //this.card = this.cards[4];
-    this.card = {
-      id: '89631139',
-      attribute: 'LIGHT',
-      name: 'Card Name',
-      desc: "Write a description.",
-      race: 'Aqua',
-      level: 1,
-      atk: 0,
-      def: 0,
-      frameType: "normal",
-    }
     this.img = './assets/img/duelist.svg';
   }
 
   firstUpdated(){
     this.matrixFont();
     this.draw();
-    this.getTextInput();
-  }
-
-  getTextInput(){
-    if(this.shadowRoot.ownerDocument.getElementsByTagName('custom-cropper')){
-      this.shadowRoot.ownerDocument.getElementsByTagName('custom-cropper')[0].getElementsByTagName('text-input')[0].params = this.card;
-    }
   }
 
   matrixFont(){
@@ -368,6 +349,7 @@ export class CardMaker extends LitElement {
 
   setEventTemplate(ev){
     this.card.frameType = ev.detail;
+    if(this.card.frameType.includes('bgs/')) this.card.frameType = ev.detail.split('bgs/')[1].split('.')[0];
     this.draw();
   }
 

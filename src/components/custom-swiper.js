@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { Swiper } from 'swiper';
-import { EffectCoverflow, EffectCards, EffectCube } from 'swiper/modules';
-import 'swiper/css';
+//import { EffectCoverflow, EffectCards, EffectCube } from 'swiper/modules';
 
 export class CustomSwiper extends LitElement {
 
@@ -9,15 +8,11 @@ export class CustomSwiper extends LitElement {
         slides: { type: Array },
         swiperEl: { type: Object },
         swiperOptions: { type: Object },
+        customOpacity: { type: Boolean },
     };
 
     static get styles() {
         return [css`
-    :host{
-      width: 100%;
-      position: absolute;
-      left:0;
-    }
     .swiper{
       overflow: hidden;
       width: 100%;
@@ -33,7 +28,7 @@ export class CustomSwiper extends LitElement {
       opacity: 1;
       transition: all 1s;
     }
-    .swiper-slide-active{
+    .swiper-slide-active.opacity{
       transition: all 1s;
       opacity: 0;
     }
@@ -47,60 +42,7 @@ export class CustomSwiper extends LitElement {
 
     constructor() {
         super();
-        //this.slides = [...Array(14)];
-        this.slides = [
-            'normal',
-            'effect',
-            'fusion',
-            'xyz',
-            'ritual',
-            'synchro',
-            'link',
-            'token',
-            'spell',
-            'trap',
-            'skill'
-        ]
-        this.swiperOptions = {
-            modules: [EffectCoverflow, EffectCards, EffectCube],
-            centeredSlides: 'true',
-            //direction: 'vertical',
-            //effect: 'cube',
-            coverflowEffect: {
-                rotate: 50, // Slide rotate in degrees
-                stretch: 0, // Stretch space between slides (in px)
-                depth: 100, // Depth offset in px (slides translate in Z axis)
-                modifier: 0, // Effect multipler
-                slideShadows : true, // Enables slides shadows
-            },
-            initialSlide: 0,
-            loop: false,
-            slidesPerView: 3,
-            grabCursor: true,
-            keyboard: true,
-            breakpoints: {
-                0: {
-                    slidesPerView: 1,
-                    spaceBetween: 200,
-                  },
-                320: {
-                    slidesPerView: 2,
-                    spaceBetween: 280,
-                  },
-                640: {
-                  slidesPerView: 3,
-                  spaceBetween: 320,
-                },
-                768: {
-                  slidesPerView: 3,
-                  spaceBetween: 200,
-                },
-                1024: {
-                  slidesPerView: 4,
-                  spaceBetween: 270,
-                },
-              },
-        };
+        this.customOpacity = false;
     }
 
     firstUpdated() {
@@ -152,9 +94,10 @@ export class CustomSwiper extends LitElement {
         return html`
         <div class="swiper" id="swiper">
             <div class="swiper-wrapper">
+                ${console.log(this.slides)}
                 ${this.slides.map( (current, index) => html`
-                <div class="swiper-slide" @click="${() => this._handleClick(index)}">
-                    <img src="./assets/maker/bgs/${current}.png" class="select-bg" />
+                <div class="swiper-slide  ${this.customOpacity ? 'opacity' : ''}" @click="${() => this._handleClick(index)}">
+                    <img src="${current}" class="select-bg" />
                 </div>`)}
             </div>
         </div>

@@ -143,17 +143,15 @@ export class TextInput extends LitElement {
 
   constructor() {
     super();
+    this.swiperOptions = {
+      centeredSlides: 'true',
+      initialSlide: 0,
+      loop: false,
+      slidesPerView: 3,
+      grabCursor: true,
+    };
+  
     this.notLevel = false;
-    this.params = {
-      attribute: '',
-      name: '',
-      desc: '',
-      race: '',
-      atk: 0,
-      def: 0,
-      level: 1,
-      frameType: ''
-    }
     this.spells = [
       'Normal',
 			'Quick-Play',
@@ -190,14 +188,14 @@ export class TextInput extends LitElement {
 			'Wyrm', 
 			'Zombie',
 		]
-		this.attribute = [
-      'dark',
-      'earth',
-      'fire',
-      'divine',
-      'light',
-      'water',
-      'wind',
+		this.slides = [
+      './assets/filters/dark.svg',
+      './assets/filters/earth.svg',
+      './assets/filters/fire.svg',
+      './assets/filters/divine.svg',
+      './assets/filters/light.svg',
+      './assets/filters/water.svg',
+      './assets/filters/wind.svg',
 		]
   }
 
@@ -251,8 +249,8 @@ export class TextInput extends LitElement {
         </div>
 
         <div class="container">
-          <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'name')}" class="w-100" label="Title" maxLength="30"  value="${this.params.name}"></mwc-textfield>
-          <div class="length">${this.params.name.length}/30</div>
+
+          <custom-swiper .slides="${this.slides}" .swiperOptions="${this.swiperOptions}"></custom-swiper>
 
           <mwc-slider
               @input="${(ev)=> this.checkInput(ev, 'level')}"
@@ -264,6 +262,9 @@ export class TextInput extends LitElement {
               max="12"
               value="${this.params.level}">
           </mwc-slider>
+
+          <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'name')}" class="w-100" label="Title" maxLength="30"  value="${this.params.name}"></mwc-textfield>
+          <div class="length">${this.params.name.length}/30</div>
 
           <mwc-textarea @input="${(ev)=> this.checkInput(ev, 'desc')}"
               class="w-100"
