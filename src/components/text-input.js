@@ -6,6 +6,7 @@ import '@material/mwc-icon/mwc-icon.js';
 import '@material/mwc-select/mwc-select.js';
 import '@material/mwc-list/mwc-list-item.js';
 import '@material/mwc-button/mwc-button.js';
+import '@material/mwc-icon/mwc-icon.js';
 export class TextInput extends LitElement {
 
   static get properties() {
@@ -33,12 +34,35 @@ export class TextInput extends LitElement {
 
   static get styles() {
     return css`
+            mwc-select,
+            mwc-textarea.rounded,
+            mwc-textfield.rounded {
+              --mdc-shape-small: 4px;
+              background: rgba(255,255,255,.8)
+            }
+            .mwc-slider-container{
+              position: relative;
+              background: rgba(255,255,255,.8);
+              border-radius: 4px;
+              border: solid 1px rgba(0,0,0,.38);
+            }
+            .mwc-slider-container label{
+              font-size: 11px;
+              background-color: rgba(255, 255, 255, .95);
+              padding: 4px 4px 0 4px;
+              color: rgba(0, 0, 0, .8);
+              border-radius: 4px;
+              position: absolute;
+              top: -12px;
+              left: 10px;
+            }
             .hidden{ display: none;}
             .text-center{ text-align: center; }
             .w-100{ width: 100%; }
             .p-relative{ position: relative; }
             .p-absolute{ position: absolute; }
             .z-2 { z-index: 2; }
+            .d-block{ display: block; }
             .d-flex{ display: flex; }
             .content-center{ justify-content: center; align-items: center; }
             .content-start{ justify-content: start; align-items: center; }
@@ -46,8 +70,9 @@ export class TextInput extends LitElement {
             .ml{ margin-left: 4px;}
             .mr{ margin-right: 4px;}
             .mb-16{ margin-bottom: 16px;}
+            .mb-32{ margin-bottom: 32px;}
             .wrapper{
-                background: rgba(0,0,0,.9);
+                background: rgba(255,255,255,.9);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
@@ -62,41 +87,11 @@ export class TextInput extends LitElement {
                 transition: all .3s ease-in;
             }
             .length{
-                color: white;
                 width: 100%;
                 text-align: right;
                 font-size: .8rem;
                 margin: 8px 0 16px 0;
-                opacity: .5;
-            }
-            .close-container{
-              position: fixed;
-              right: 16px;
-              top: 16px;
-              width: 40px;
-              height: 40px;
-              cursor: pointer;
-              z-index: 2;
-            }
-            .leftright{
-              height: 4px;
-              width: 40px;
-              position: absolute;
-              margin-top: 24px;
-              background-color: white;
-              border-radius: 2px;
-              transform: rotate(45deg);
-              transition: all .3s ease-in;
-            }
-            .rightleft{
-              height: 4px;
-              width: 40px;
-              position: absolute;
-              margin-top: 24px;
-              background-color: white;
-              border-radius: 2px;
-              transform: rotate(-45deg);
-              transition: all .3s ease-in;
+                opacity: .8;
             }
             .container{
                 width: 100%;
@@ -147,7 +142,7 @@ export class TextInput extends LitElement {
       centeredSlides: 'true',
       initialSlide: 0,
       loop: false,
-      slidesPerView: 3,
+      slidesPerView: 4,
       grabCursor: true,
     };
   
@@ -189,16 +184,19 @@ export class TextInput extends LitElement {
 			'Zombie',
 		]
 		this.slides = [
-      './assets/filters/dark.svg',
-      './assets/filters/earth.svg',
-      './assets/filters/fire.svg',
-      './assets/filters/divine.svg',
-      './assets/filters/light.svg',
-      './assets/filters/water.svg',
-      './assets/filters/wind.svg',
+      'dark',
+      'earth',
+      'fire',
+      'divine',
+      'light',
+      'water',
+      'wind',
 		]
+    this.extraInfo = {
+      url: './assets/filters/',
+      extension: '.svg'
+    }
   }
-
   closeInput() {
     this.show = false;
     this.dispatchCustomEvent('checkinput', this.params);
@@ -207,6 +205,11 @@ export class TextInput extends LitElement {
     this.show = true;
     this.checkLevel();
     this.requestUpdate();
+    setTimeout(() => {
+      this.getClearInput('name');
+      this.getClearInput('atk');
+      this.getClearInput('def');
+    }, 500);
   }
   checkLevel(){
     this.notLevel = ['link', 'spell', 'trap'].includes(this.params.frameType) ? true : false;
@@ -226,10 +229,17 @@ export class TextInput extends LitElement {
       reader.readAsDataURL(e.target.files[0]);
     }
   }
-
   checkInput(ev, name) {
     this.params[name] = ev.target.value;
     this.requestUpdate();
+  }
+  getClearInput(name){
+    let input = this.shadowRoot.getElementById(name).shadowRoot.querySelector('i');
+    input.style = 'pointer-events: unset; cursor: pointer';
+    input.addEventListener('click', (e) => {
+      this.params[name] = '';
+      this.requestUpdate();
+    });
   }
   dispatchCustomEvent(event, detail) {
     const options = {
@@ -243,55 +253,75 @@ export class TextInput extends LitElement {
   render() {
     return this.show ? html`
     <div class="wrapper d-flex">
-        <div class="close-container" @click="${this.closeInput}">
-            <div class="leftright"></div>
-            <div class="rightleft"></div>
-        </div>
-
         <div class="container">
 
-          <custom-swiper .slides="${this.slides}" .swiperOptions="${this.swiperOptions}"></custom-swiper>
+          <custom-swiper
+            class="d-block mb-32" 
+            .slides="${this.slides}" 
+            .swiperOptions="${this.swiperOptions}"
+            .extraInfo="${this.extraInfo}">
+          </custom-swiper>
 
+          <div class="mwc-slider-container">
+          <label>Level</label>
           <mwc-slider
               @input="${(ev)=> this.checkInput(ev, 'level')}"
-              class="mb-16 ${this.notLevel ? 'hidden' : ''}"
+              class=" ${this.notLevel ? 'hidden' : ''}"
               discrete
-              withTickMarks
               step="1"
               min="1"
               max="12"
               value="${this.params.level}">
           </mwc-slider>
+          </div>
 
-          <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'name')}" class="w-100" label="Title" maxLength="30"  value="${this.params.name}"></mwc-textfield>
+          <div class="length">${this.params.level}/12</div>
+
+          <mwc-textfield 
+            @input="${(ev)=> this.checkInput(ev, 'name')}" 
+            class="w-100 rounded" label="Title" maxLength="30"
+            iconTrailing="close" id="name" outlined
+            value="${this.params.name}">
+          </mwc-textfield>
           <div class="length">${this.params.name.length}/30</div>
 
           <mwc-textarea @input="${(ev)=> this.checkInput(ev, 'desc')}"
-              class="w-100"
+              class="w-100 rounded" outlined
               label="Description"
               value="${this.params.desc}"
               maxLength="350">
           </mwc-textarea>
           <div class="length">${this.params.desc.length}/350</div>
 
-          <mwc-select label="Race" class="w-100 mb-16 ${this.params.frameType === 'spell' || this.params.frameType === 'trap' ? 'hidden' : ''}">
+          <mwc-select label="Race" outlined class="w-100 mb-16 ${this.params.frameType === 'spell' || this.params.frameType === 'trap' ? 'hidden' : ''}">
             ${this.race.map(item => html`
               <mwc-list-item .selected="${item === this.params.race}" value="${item}" @click="${(ev)=> this.checkInput(ev, 'race')}">${item}</mwc-list-item>
             `)}
           </mwc-select>
 
-          <mwc-select label="Type" class="w-100 mb-16 ${this.params.frameType === 'spell' ? '' : 'hidden'}">
+          <mwc-select label="Type" outlined class="w-100 mb-16 ${this.params.frameType === 'spell' ? '' : 'hidden'}">
             ${this.spells.map(item => html`
               <mwc-list-item .selected="${item === this.params.race}" value="${item}" @click="${(ev)=> this.checkInput(ev, 'race')}">${item}</mwc-list-item>
             `)}
           </mwc-select>
 
-          <div class="d-flex mb-16">
-            <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'atk')}" class="w-100 mr" label="Attack" type="tel" maxLength="4" value="${this.params.atk}"></mwc-textfield>
-            <mwc-textfield @input="${(ev)=> this.checkInput(ev, 'def')}" class="w-100 ml" label="Defense" type="tel" maxLength="4" value="${this.params.def}"></mwc-textfield>
+          <div class="d-flex mb-32">
+            <mwc-textfield 
+              @input="${(ev)=> this.checkInput(ev, 'atk')}" 
+              class="w-100 mr rounded" label="Attack" type="tel"
+              iconTrailing="close" id="atk" outlined
+              maxLength="4" value="${this.params.atk}">
+            </mwc-textfield>
+            <mwc-textfield 
+              @input="${(ev)=> this.checkInput(ev, 'def')}" 
+              class="w-100 ml rounded" label="Defense" type="tel"
+              iconTrailing="close" id="def" outlined
+              maxLength="4" value="${this.params.def}">
+            </mwc-textfield>
           </div>
 
-          <mwc-button class="w-100" raised label="Confirm" @click="${this.closeInput}"></mwc-button>
+          <mwc-button class="w-100 mb-16" raised label="Confirm" @click="${this.closeInput}"></mwc-button>
+          <mwc-button class="w-100" label="Reset"></mwc-button>
         </div>
     </div>
     ` : html`

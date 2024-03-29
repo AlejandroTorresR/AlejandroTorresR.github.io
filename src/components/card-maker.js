@@ -348,8 +348,8 @@ export class CardMaker extends LitElement {
   }
 
   setEventTemplate(ev){
+    console.log(ev, 'card-maker');
     this.card.frameType = ev.detail;
-    if(this.card.frameType.includes('bgs/')) this.card.frameType = ev.detail.split('bgs/')[1].split('.')[0];
     this.draw();
   }
 

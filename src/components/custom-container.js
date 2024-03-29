@@ -71,18 +71,22 @@ export class CustomContainer extends LitElement {
               },
         };
         this.slides = [
-            './assets/maker/bgs/normal.png',
-            './assets/maker/bgs/effect.png',
-            './assets/maker/bgs/fusion.png',
-            './assets/maker/bgs/xyz.png',
-            './assets/maker/bgs/ritual.png',
-            './assets/maker/bgs/synchro.png',
-            './assets/maker/bgs/link.png',
-            './assets/maker/bgs/token.png',
-            './assets/maker/bgs/spell.png',
-            './assets/maker/bgs/trap.png',
-            './assets/maker/bgs/skill.png'
+            'normal',
+            'effect',
+            'fusion',
+            'xyz',
+            'ritual',
+            'synchro',
+            'link',
+            'token',
+            'spell',
+            'trap',
+            'skill'
         ]
+        this.extraInfo = {
+            url: './assets/maker/bgs/',
+            extension: '.png'
+        }
     }
 
     render() {
@@ -91,7 +95,11 @@ export class CustomContainer extends LitElement {
             <custom-cropper>
                 <text-input .params="${this.card}"></text-input>
             </custom-cropper>
-            <custom-swiper class="absolute" customOpacity .slides="${this.slides}" .swiperOptions="${this.swiperOptions}"></custom-swiper>
+            <custom-swiper 
+                class="absolute" customOpacity 
+                .slides="${this.slides}" 
+                .swiperOptions="${this.swiperOptions}"
+                .extraInfo="${this.extraInfo}"></custom-swiper>
         </card-maker>
         `;
     }

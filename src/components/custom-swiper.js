@@ -9,6 +9,7 @@ export class CustomSwiper extends LitElement {
         swiperEl: { type: Object },
         swiperOptions: { type: Object },
         customOpacity: { type: Boolean },
+        extraInfo: { type: Object },
     };
 
     static get styles() {
@@ -26,7 +27,7 @@ export class CustomSwiper extends LitElement {
       align-items: center;
       justify-content: center;
       opacity: 1;
-      transition: all 1s;
+      transition: 'opacity' 1s;
     }
     .swiper-slide-active.opacity{
       transition: all 1s;
@@ -70,6 +71,10 @@ export class CustomSwiper extends LitElement {
         return  activeIndex;
     }
 
+    getUrlAttributes(name, params){
+        return `${params.url}${name}${params.extension}`;
+    }
+
     _checkIndex() {
         this.swiperEl.on('slideChange', (res) => {
             //console.log(this.swiperEl.realIndex, 'real');
@@ -94,10 +99,9 @@ export class CustomSwiper extends LitElement {
         return html`
         <div class="swiper" id="swiper">
             <div class="swiper-wrapper">
-                ${console.log(this.slides)}
                 ${this.slides.map( (current, index) => html`
                 <div class="swiper-slide  ${this.customOpacity ? 'opacity' : ''}" @click="${() => this._handleClick(index)}">
-                    <img src="${current}" class="select-bg" />
+                    <img src="${this.extraInfo ? this.extraInfo.url + current + this.extraInfo.extension : current}" class="select-bg" />
                 </div>`)}
             </div>
         </div>
