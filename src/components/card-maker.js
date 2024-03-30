@@ -225,9 +225,20 @@ export class CardMaker extends LitElement {
     this.draw();
   }
 
+  saveCanvasFile(){
+    var canvas = this.shadowRoot.getElementById("card");
+    let canvasUrl = canvas.toDataURL("image/jpeg");
+    const createEl = document.createElement('a');
+    createEl.href = canvasUrl;
+    createEl.download = "download-this-canvas";
+    createEl.click();
+    createEl.remove();
+
+  }
+
   render() {
     return html`
-      <div @bgtemplate="${this.setEventTemplate}" @checkinput=${this.setEventParams} @croppedevent="${this.setEventCard}"><slot></slot></div>
+      <div @savecanvas="${this.saveCanvasFile}" @bgtemplate="${this.setEventTemplate}" @checkinput=${this.setEventParams} @croppedevent="${this.setEventCard}"><slot></slot></div>
       <canvas id="card" height="884" width="600"></canvas>`;
   }
 
