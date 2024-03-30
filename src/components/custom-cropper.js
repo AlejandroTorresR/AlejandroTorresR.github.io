@@ -26,7 +26,7 @@ export class CustomCropper extends LitElement {
       flex-direction: column;
       justify-content: center;
       background-color: rgba(0,0,0,.9);
-      z-index: 1;
+      z-index: 3;
     }
     .close-container{
       position: fixed;

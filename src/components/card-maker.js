@@ -16,7 +16,6 @@ export class CardMaker extends LitElement {
   `;
 
   static properties = {
-    isEditable: { type: Boolean },
     ctx: { type: Object },
     card: { type: Object },
     img: { type: String },
@@ -24,156 +23,14 @@ export class CardMaker extends LitElement {
 
   constructor() {
     super();
-    this.isEditable = false;
-    this.cards = [{
-        id: '38033121',
-        attribute: 'DARK',
-        name: 'Dark Magician Girl',
-        desc: 'This card gains 300 ATK for every "Dark Magician" or "Magician of Black Chaos" in either player´s Graveyard.',
-        race: 'Spellcaster',
-        level: 6,
-        atk: 2000,
-        def: 1700,
-        frameType: "effect",
-      }, {
-        id: '73580471',
-        attribute: 'FIRE',
-        name: 'Black Rose Dragon',
-        desc: "1 Tuner + 1+ non-Tuner monsters\r\nWhen this card is Synchro Summoned: You can destroy all cards on the field. Once per turn: You can banish 1 Plant monster from your GY, then target 1 Defense Position monster your opponent controls; change that target to face-up Attack Position, and if you do, its ATK becomes 0 until the end of this turn.",
-        race: 'Dragon',
-        level: 7,
-        atk: 2400,
-        def: 1800,
-        frameType: "synchro",
-      }, {
-        id: '33652635',
-        attribute: 'DARK',
-        name: 'Gladiator Beast Domitianus',
-        desc: "\"Gladiator Beast Vespasius\" + 2 \"Gladiator Beast\" monsters\r\nMust first be Special Summoned (from your Extra Deck) by shuffling the above cards you control into the Deck. (You do not use \"Polymerization\".) Once per turn, when your opponent activates a monster effect (Quick Effect): You can negate the activation, and if you do, destroy it. You choose the attack targets for your opponent's attacks. At the end of the Battle Phase, if this card battled: You can return this card to the Extra Deck; Special Summon 1 \"Gladiator Beast\" monster from your Deck.",
-        race: 'Sea Serpent',
-        level: 10,
-        atk: 3500,
-        def: 1200,
-        frameType: "fusion",
-      }, {
-        id: '78156759',
-        attribute: 'FIRE',
-        name: 'Wind-Up Zenmaines',
-        desc: "2 Level 3 monsters\r\nIf this face-up card on the field would be destroyed, you can detach 1 Xyz Material from this card instead. Once per turn, during the End Phase, if this effect was used this turn: Target 1 card on the field; destroy it.",
-        race: 'Machine',
-        level: 3,
-        atk: 1500,
-        def: 2100,
-        frameType: "xyz",
-      }, {
-        id: '89631139',
-        attribute: 'LIGHT',
-        name: 'Blue-Eyes White Dragon',
-        desc: "This legendary dragon is a powerful engine of destruction. Virtually invincible, very few have faced this awesome creature and lived to tell the tale.",
-        race: 'Dragon',
-        level: 8,
-        atk: 3000,
-        def: 2500,
-        frameType: "normal",
-      }, {
-        id: 1735088,
-        name: "Wind-Up Zenmaintenance",
-        type: "Link Monster",
-        frameType: "link",
-        desc: "2 \"Wind-Up\" monsters\r\nIf this card is destroyed and sent to the GY: You can target 1 \"Wind-Up\" Xyz Monster you control; attach this card to it as material. You can only use each of the following effects of \"Wind-Up Zenmaintenance\" once per turn.\r\n● If this card is Link Summoned: You can add 1 \"Wind-Up\" card from your Deck to your hand.\r\n● You can banish 1 face-up \"Wind-Up\" monster you control, face-down; Special Summon 1 monster from your Deck with the same name that card had on the field.",
-        atk: 1800,
-        race: "Machine",
-        attribute: "LIGHT",
-        archetype: "Wind-Up",
-        linkval: 2,
-        linkmarkers: [
-            "Bottom-Left",
-            "Bottom-Right"
-        ],
-      }, {
-        id: 69123138,
-        name: "Zera the Mant",
-        type: "Ritual Monster",
-        frameType: "ritual",
-        desc: "This card can only be Ritual Summoned with the Ritual Spell Card, \"Zera Ritual\".",
-        atk: 2800,
-        def: 2300,
-        level: 8,
-        race: "Fiend",
-        attribute: "DARK",
-      }, {
-        id: 12580477,
-        name: "Raigeki",
-        type: "Spell Card",
-        frameType: "spell",
-        desc: "Destroy all monsters your opponent controls.",
-        race: "Normal",
-      }, {
-        id: 44095762,
-        name: "Mirror Force",
-        type: "Trap Card",
-        frameType: "trap",
-        desc: "When an opponent's monster declares an attack: Destroy all your opponent's Attack Position monsters.",
-        race: "Normal",
-      }, {
-        id: 48017809,
-        name: "Mirage Tube",
-        type: "Spell Card",
-        frameType: "spell",
-        desc: "This card cannot be activated from your hand. Activate only when a face-up monster you control is selected as an attack target. Inflict 1000 damage to your opponent.",
-        race: "Quick-Play",
-      }, {
-        id: 22359980,
-        name: "Mirror Wall",
-        type: "Trap Card",
-        frameType: "trap",
-        desc: "Each of your opponent's monsters that conducted an attack while this card was face-up on the field has its ATK halved as long as this card remains on the field. During each of your Standby Phases, pay 2000 LP or destroy this card.",
-        race: "Continuous",
-      }, {
-        id: 30194529,
-        name: "Ningirsu the World Chalice Warrior",
-        type: "Link Monster",
-        frameType: "link",
-        desc: "2+ Link Monsters\r\nIf this card is Link Summoned: Draw cards equal to the number of \"World Chalice\" monsters this card points to. You can only use this effect of \"Ningirsu the World Chalice Warrior\" once per turn. Once per turn: You can send 1 card from each player's field to the GYs. If this card is sent from the field to the GY: You can Special Summon 1 \"World Chalice\" monster from your hand.",
-        atk: 2500,
-        race: "Warrior",
-        attribute: "EARTH",
-        archetype: "World Chalice",
-        linkval: 3,
-        linkmarkers: [
-            "Left",
-            "Top",
-            "Right",
-        ],
-      }, {
-        id: 15394084,
-        name: "Nordic Beast Token",
-        type: "Token",
-        frameType: "token",
-        desc: "Special Summoned with the effect of \"Tanngrisnir of the Nordic Beasts\".",
-        atk: 0,
-        def: 0,
-        level: 3,
-        race: "Beast",
-        attribute: "EARTH",
-        archetype: "Nordic",
-      }, {
-        id: 300302069,
-        name: "Order of the Queen",
-        type: "Skill Card",
-        frameType: "skill",
-        desc: "While you control \"Amazoness Queen\", negate the effects of Effect Monsters destroyed by battle with attacking \"Amazoness\" monsters you control.",
-        race: "Tania",
-      }
-    ]
     this.img = './assets/img/duelist.svg';
+    this.card = {};
   }
 
   firstUpdated(){
     this.matrixFont();
     this.draw();
   }
-
   matrixFont(){
     const myFont = new FontFace('matrix', 'url(../assets/fonts/matrix.ttf)');
     myFont.load().then((font) => {
@@ -208,14 +65,12 @@ export class CardMaker extends LitElement {
       bg.src = `./assets/maker/bgs/${this.card.frameType}.png`;
     }
   }
-
   firstDigit(num) {
     const numStr = String(Math.abs(num));
     const firstChar = numStr[0];
     const firstDigitUnsigned = Number(firstChar);
     return (num < 0) ? -firstDigitUnsigned : firstDigitUnsigned;
   }
-
   setImageCard(ev){
     const img = new Image();
     img.onload = () => this.ctx.drawImage(img, 68, 160, 464, 464);
@@ -226,7 +81,7 @@ export class CardMaker extends LitElement {
     this.ctx.fillText(this.card.name, 42, 82, 440);
   }
   setAttribute(){
-    this.card.attribute = ['spell', 'trap'].includes(this.card.frameType) ? this.card.frameType : 'LIGHT';
+    this.card.attribute = ['spell', 'trap'].includes(this.card.frameType) ? this.card.frameType : (['spell', 'trap'].includes(this.card.attribute) ? 'DARK' : this.card.attribute);
     const attribute = new Image();
     attribute.onload = () => this.ctx.drawImage(attribute, 504, 38, 58, 58);
     let att = this.card.attribute ? this.card.attribute.toLowerCase() : this.card.frameType;
@@ -348,9 +203,10 @@ export class CardMaker extends LitElement {
   }
 
   setEventTemplate(ev){
-    console.log(ev, 'card-maker');
-    this.card.frameType = ev.detail;
-    this.draw();
+    if(ev.detail[1]) {
+      this.card.frameType = ev.detail[0]
+      this.draw();
+    }
   }
 
   setEventParams(ev){
@@ -360,6 +216,7 @@ export class CardMaker extends LitElement {
     this.card.def = ev.detail.def;
     this.card.level = ev.detail.level;
     this.card.race = ev.detail.race;
+    this.card.attribute = ev.detail.attribute;
     this.draw();
   }
 
@@ -370,7 +227,7 @@ export class CardMaker extends LitElement {
 
   render() {
     return html`
-      <div @bgtemplate=${this.setEventTemplate} @checkinput=${this.setEventParams} @croppedevent="${this.setEventCard}"><slot></slot></div>
+      <div @bgtemplate="${this.setEventTemplate}" @checkinput=${this.setEventParams} @croppedevent="${this.setEventCard}"><slot></slot></div>
       <canvas id="card" height="884" width="600"></canvas>`;
   }
 

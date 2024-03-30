@@ -4,14 +4,24 @@ export class CustomContainer extends LitElement {
 
     static properties = {
         slides: { type: Array },
+        swiperOptions: { type: Object },
+        card: { type: Object },
+        extraInfo: { type: Object }
     };
 
     static get styles() {
         return [css`
         .absolute{
             width: 100%; 
+            height: 100%;
             position: absolute; 
-            left:0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card{
+            top: 0;
+            left: 0;
         }
         `,
         ];
@@ -20,8 +30,8 @@ export class CustomContainer extends LitElement {
     constructor() {
         super();
         this.card = {
-            id: '89631139',
-            attribute: 'LIGHT',
+            id: '',
+            attribute: 'DARK',
             name: 'Card Name',
             desc: "Write a description.",
             race: 'Aqua',
@@ -89,18 +99,25 @@ export class CustomContainer extends LitElement {
         }
     }
 
+    setEventTemplate(ev){
+        if(!ev.detail[1]) this.card.attribute = ev.detail[0];
+      }
+
     render() {
         return html`
-        <card-maker .card="${this.card}">
-            <custom-cropper>
-                <text-input .params="${this.card}"></text-input>
-            </custom-cropper>
-            <custom-swiper 
-                class="absolute" customOpacity 
-                .slides="${this.slides}" 
-                .swiperOptions="${this.swiperOptions}"
-                .extraInfo="${this.extraInfo}"></custom-swiper>
-        </card-maker>
+            <card-maker class="absolute" .card="${this.card}" >
+                <custom-cropper>
+                    <text-input .params="${this.card}"></text-input>
+                </custom-cropper>
+                <custom-swiper
+                    isAllone customOpacity
+                    @bgtemplate="${this.setEventTemplate}"
+                    class="absolute card"
+                    .slides="${this.slides}" 
+                    .swiperOptions="${this.swiperOptions}"
+                    .extraInfo="${this.extraInfo}">
+                </custom-swiper>
+            </card-maker>
         `;
     }
 }
