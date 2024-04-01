@@ -6,7 +6,8 @@ export class CustomContainer extends LitElement {
         slides: { type: Array },
         swiperOptions: { type: Object },
         card: { type: Object },
-        extraInfo: { type: Object }
+        extraInfo: { type: Object },
+        offsetArray: { type: Array },
     };
 
     static get styles() {
@@ -39,6 +40,7 @@ export class CustomContainer extends LitElement {
             atk: 0,
             def: 0,
             frameType: "normal",
+            linkmarkers: []
         }
         this.swiperOptions = {
             //modules: [EffectCoverflow, EffectCards, EffectCube],
@@ -103,9 +105,13 @@ export class CustomContainer extends LitElement {
         if(!ev.detail[1]) this.card.attribute = ev.detail[0];
       }
 
+    setOffset(e){
+        this.offsetArray = e.detail;
+    }
+
     render() {
         return html`
-            <card-maker class="absolute" .card="${this.card}" >
+            <card-maker class="absolute" .card="${this.card}" @offsetarray="${this.setOffset}">
                 <custom-cropper>
                     <text-input .params="${this.card}"></text-input>
                 </custom-cropper>
@@ -113,6 +119,7 @@ export class CustomContainer extends LitElement {
                     isAllone customOpacity
                     @bgtemplate="${this.setEventTemplate}"
                     class="absolute card"
+                    .offsetArray="${this.offsetArray}"
                     .slides="${this.slides}" 
                     .swiperOptions="${this.swiperOptions}"
                     .extraInfo="${this.extraInfo}">

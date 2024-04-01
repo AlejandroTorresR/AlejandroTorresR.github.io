@@ -19,6 +19,7 @@ export class CardMaker extends LitElement {
     ctx: { type: Object },
     card: { type: Object },
     img: { type: String },
+    offsetArray: { type: Array }
   };
 
   constructor() {
@@ -40,6 +41,8 @@ export class CardMaker extends LitElement {
 
   draw() {
     var canvas = this.shadowRoot.getElementById("card");
+    this.offsetArray = [canvas.offsetLeft, canvas.offsetTop, canvas.offsetWidth, canvas.offsetHeight];
+    this.dispatchCustomEvent('offsetarray', this.offsetArray);
     if (canvas.getContext) {
       this.ctx = canvas.getContext("2d");
       this.ctx.textRendering = "geometricPrecision";
@@ -112,11 +115,11 @@ export class CardMaker extends LitElement {
     if(this.card.frameType !== 'spell' && this.card.frameType !== 'trap' && this.card.frameType !== 'skill') this.ctx.fillText(this.card.atk, 380, 830);
     if(this.card.frameType !== 'spell' && this.card.frameType !== 'trap' && this.card.frameType !== 'skill' && this.card.frameType !== 'link') this.ctx.fillText(this.card.def, 500, 830);
     if(this.card.frameType === 'link') {
-      if(!this.card.linkval) {
+      if(!this.card.linkmarkers.length){
         this.card.linkval = 0;
         this.card.linkmarkers = []
       }
-      this.ctx.fillText(this.card.linkval, 532, 830);
+      this.ctx.fillText(this.card.linkmarkers.length, 532, 830);
       this.setArrows(this.card.linkmarkers);
     };
   }
@@ -230,15 +233,32 @@ export class CardMaker extends LitElement {
     let canvasUrl = canvas.toDataURL("image/jpeg");
     const createEl = document.createElement('a');
     createEl.href = canvasUrl;
-    createEl.download = "download-this-canvas";
+    createEl.download = this.card.name;
     createEl.click();
     createEl.remove();
+  }
 
+  setLinkArrows(e){
+    if(this.card.linkmarkers.includes(e.detail)) {
+      this.card.linkmarkers = this.card.linkmarkers.filter(item => item !== e.detail)
+    } else {
+      this.card.linkmarkers.push(e.detail);
+    }
+    this.draw();
+}
+
+  dispatchCustomEvent(event, detail) {
+    const options = {
+      detail: detail,
+      bubbles: true,
+      composed: true,
+    };
+    this.dispatchEvent(new CustomEvent(event, options));
   }
 
   render() {
     return html`
-      <div @savecanvas="${this.saveCanvasFile}" @bgtemplate="${this.setEventTemplate}" @checkinput=${this.setEventParams} @croppedevent="${this.setEventCard}"><slot></slot></div>
+      <div @linkarrows="${this.setLinkArrows}" @savecanvas="${this.saveCanvasFile}" @bgtemplate="${this.setEventTemplate}" @checkinput=${this.setEventParams} @croppedevent="${this.setEventCard}"><slot></slot></div>
       <canvas id="card" height="884" width="600"></canvas>`;
   }
 

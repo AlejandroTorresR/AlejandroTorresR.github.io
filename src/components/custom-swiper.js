@@ -13,6 +13,7 @@ export class CustomSwiper extends LitElement {
         isAllone: { type: Boolean },
         isSquare: { type: Boolean },
         selected: { type: String },
+        offsetArray: { type: Array },
     };
 
     static get styles() {
@@ -94,6 +95,44 @@ export class CustomSwiper extends LitElement {
         });
     }
 
+    clickLinkArrows(e, index, current){
+        let params = [];
+        let data = {
+            'bottom-left': [45, 590, 60, 60],
+            'top-left': [45, 134, 60, 60],
+            'bottom-right': [495, 590, 60, 60],
+            'top-right': [495, 134, 60, 60],
+            'bottom': [235, 625, 125, 30],
+            'left': [35, 330, 30, 125],
+            'right': [535, 330, 30, 125],
+            'top': [235, 130, 125, 30],
+        }
+        let w = this.offsetArray[2]/600;
+        let h = this.offsetArray[3]/884;
+        if((Number(index) === this.swiperEl.realIndex) && (current === 'link')){
+            let clickedX = e.pageX - this.offsetArray[0];
+            let clickedY = e.pageY - this.offsetArray[1];
+            Object.entries(data).map((i)=>{
+                let item = {
+                    left: i[1][0]*w - i[1][2]*w,
+                    top: i[1][1]*h - i[1][3]*h,
+                    right: i[1][0]*w + i[1][2]*w,
+                    bottom: i[1][1]*h + i[1][3]*h
+                }
+                params.push(item);
+                data[i[0]] = [i[1][0]*w, i[1][1]*h, i[1][2]*w, i[1][3]*h];
+            })
+            for(let i = 0; i < params.length; i++){
+                if(clickedX < params[i].right &&
+                   clickedX > params[i].left &&
+                   clickedY > params[i].top &&
+                   clickedY < params[i].bottom){
+                    this.dispatchCustomEvent('linkarrows', Object.keys(data)[i]);
+                }
+            }
+        }
+    }
+
     dispatchCustomEvent(event, detail){
         const options = {
             detail: detail,
@@ -113,7 +152,7 @@ export class CustomSwiper extends LitElement {
             <div class="swiper-wrapper">
                 ${this.slides.map( (current, index) => html`
                 <div class="swiper-slide ${this.isSquare ? 'square' : ''}  ${this.customOpacity ? 'opacity' : ''}" @click="${() => this._handleClick(index)}">
-                    <img src="${this.extraInfo ? this.extraInfo.url + current + this.extraInfo.extension : current}" class="select-bg" />
+                    <img src="${this.extraInfo ? this.extraInfo.url + current + this.extraInfo.extension : current}" id="${index}" class="select-bg" @click="${(e) => this.clickLinkArrows(e, index, current)}" />
                 </div>`)}
             </div>
         </div>
