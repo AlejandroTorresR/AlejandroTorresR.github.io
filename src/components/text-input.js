@@ -335,11 +335,19 @@ export class TextInput extends LitElement {
           </mwc-textarea>
           <div class="length">${this.params.desc.length}/350</div>
 
-          <mwc-select label="Race" outlined class="w-100 mb-16 ${this.params.frameType === 'spell' || this.params.frameType === 'trap' ? 'hidden' : ''}">
+          <mwc-select label="Race" outlined class="w-100 mb-32 ${['spell', 'trap', 'skill'].includes(this.params.frameType) ? 'hidden' : ''}">
             ${this.race.map(item => html`
               <mwc-list-item .selected="${item === this.params.race}" value="${item}" @click="${(ev) => this.checkInput(ev, 'race')}">${item}</mwc-list-item>
             `)}
           </mwc-select>
+
+          <mwc-textfield 
+            @input="${(ev) => this.checkInput(ev, 'race')}" label="Type" maxLength="30"
+            class="w-100 rounded ${this.params.frameType === 'skill' ? '' : 'hidden'}" 
+            iconTrailing="close" id="race" outlined
+            value="${this.params.race}">
+          </mwc-textfield>
+          <div class="length ${this.params.frameType === 'skill' ? '' : 'hidden'}">${this.params.race.length}/30</div>
 
           <mwc-select label="Type" outlined class="w-100 mb-16 ${this.params.frameType === 'spell' ? '' : 'hidden'}">
             ${this.spells.map(item => html`
@@ -370,7 +378,7 @@ export class TextInput extends LitElement {
 
           <mwc-textfield 
             @input="${(ev) => this.checkInput(ev, 'atk')}" 
-            class="w-100 mr rounded ${['link'].includes(this.params.frameType) ? 'd-block' : 'hidden'}" label="Attack" type="tel"
+            class="w-100 mb-16 mr rounded ${['link'].includes(this.params.frameType) ? 'd-block' : 'hidden'}" label="Attack" type="tel"
             iconTrailing="close" id="atk" outlined
             maxLength="4" value="${this.params.atk}">
           </mwc-textfield>

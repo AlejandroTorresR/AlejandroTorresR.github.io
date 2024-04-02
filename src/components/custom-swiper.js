@@ -19,33 +19,44 @@ export class CustomSwiper extends LitElement {
     static get styles() {
         return [css`
             .swiper{
-            overflow: hidden;
-            width: 100%;
-            z-index: 2;
+                overflow: hidden;
+                width: 100%;
+                z-index: 2;
             }
             .swiper-horizontal .swiper-wrapper{
-            display: inline-flex;
+                display: inline-flex;
             }
             .swiper-slide{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 1;
-            transition: opacity 1s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 1;
+                transition: opacity 1s;
             }
             .swiper-slide-active.square{
-            border: solid 1px #6200ee;
-            background-color: rgba(255,255,255.8);
-            padding: 8px;
-            border-radius: 4px;
+                border: solid 1px #6200ee;
+                background-color: rgba(255,255,255.8);
+                padding: 8px;
+                border-radius: 4px;
             }
             .swiper-slide-active.opacity{
-            transition: all 1s;
-            opacity: 0;
+                transition: all 1s;
+                opacity: 0;
             }
             .select-bg{
-                width: 320px;
+                max-width: 320px;
                 border-radius: 4px;
+            }
+            #swiper2{
+                position: absolute;
+                top: 1%;
+            }
+            .select-bg2{
+                max-width: 56px;
+                border-radius: 4px;
+            }
+            .hidden{
+                display: none;
             }
             `,
         ];
@@ -58,6 +69,14 @@ export class CustomSwiper extends LitElement {
         this.customOpacity = false;
         this.isAllone = false;
         this.selected = '';
+
+        this.swiperOptions2 = {
+            initialSlide: 0,
+            loop: false,
+            slidesPerView: 5,
+            freeMode: true,
+            watchSlidesProgress: true,
+        };
     }
 
     firstUpdated() {
@@ -145,6 +164,7 @@ export class CustomSwiper extends LitElement {
 
     createSwiper() {
         this.swiperEl = new Swiper( this.shadowRoot.getElementById('swiper'), this.swiperOptions );
+        this.swiperEl2 = new Swiper( this.shadowRoot.getElementById('swiper2'), this.swiperOptions2 );
     }
 
     render() {
@@ -155,6 +175,17 @@ export class CustomSwiper extends LitElement {
                 <div class="swiper-slide ${this.isSquare ? 'square' : ''}  ${this.customOpacity ? 'opacity' : ''}" @click="${() => this._handleClick(index)}">
                     <img src="${this.extraInfo ? this.extraInfo.url + current + this.extraInfo.extension : current}" id="${index}" class="select-bg" @click="${(e) => this.clickLinkArrows(e, index, current)}" />
                 </div>`)}
+            </div>
+        </div>
+
+
+        <div class="swiper ${this.isAllone ? '' : 'hidden'}" id="swiper2">
+            <div class="swiper-wrapper">
+                ${this.slides.map( (current, index) => html`
+                    <div class="swiper-slide" @click="${() => this._handleClick(index)}">
+                        <img src="${this.extraInfo ? this.extraInfo.url + current + this.extraInfo.extension : current}" id="${index}" class="select-bg2" />
+                    </div>
+                `)}
             </div>
         </div>
     `;

@@ -59,6 +59,7 @@ export class CustomContainer extends LitElement {
             slidesPerView: 3,
             grabCursor: true,
             keyboard: true,
+            thumbsSwiper: '.mySwiper2',
             breakpoints: {
                 0: {
                     slidesPerView: 1,
