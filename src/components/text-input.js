@@ -156,36 +156,6 @@ export class TextInput extends LitElement {
         display: flex;
         visibility: visible;
       }
-      .circle {
-        border-radius: 50%;
-        background-color: deepskyblue;
-        width: 50px;
-        height: 50px;
-        position: absolute;
-        opacity: 0;
-        animation: scaleIn 4s infinite cubic-bezier(.36, .11, .89, .32);
-      }
-      .item {
-        z-index: 1;
-        width: 48px;
-        height: 48px;
-        position: absolute;
-        cursor: pointer;
-        color: white;
-      }
-      .item:target{
-        color: white;
-      }
-      @keyframes scaleIn {
-        from {
-          transform: scale(.5, .5);
-          opacity: .5;
-        }
-        to {
-          transform: scale(2.5, 2.5);
-          opacity: 0;
-        }
-      }
     `;
   }
 
@@ -272,8 +242,8 @@ export class TextInput extends LitElement {
     }, 500);
   }
   checkLevel() {
-    this.notLevel = ['link', 'spell', 'trap'].includes(this.params.frameType) ? true : false;
-    if (['spell', 'trap'].includes(this.params.frameType)) this.params.race = 'Normal';
+    this.notLevel = ['link', 'spell', 'trap', 'skill'].includes(this.params.frameType) ? true : false;
+    if (['spell', 'trap'].includes(this.params.frameType) && [...this.race].includes(this.params.race)) this.params.race = 'Normal';
   }
   openFile() {
     let img = this.shadowRoot.getElementById('img');
@@ -328,7 +298,7 @@ export class TextInput extends LitElement {
         <div class="container">
 
           <custom-swiper
-            class="mb-32 ${this.notLevel ? 'hidden' : 'd-block'}" isSquare
+            class="mb-32 ${['spell', 'trap', 'skill'].includes(this.params.frameType) ? 'hidden' : 'd-block'}" isSquare
             .selected="${this.params.attribute}"
             @bgtemplate="${this.setEventTemplate}"
             .slides="${this.slides}" 
@@ -383,7 +353,7 @@ export class TextInput extends LitElement {
             `)}
           </mwc-select>
 
-          <div class="${this.notLevel ? 'hidden' : 'd-flex'}">
+          <div class="mb-16 ${this.notLevel ? 'hidden' : 'd-flex'}">
             <mwc-textfield 
               @input="${(ev) => this.checkInput(ev, 'atk')}" 
               class="w-100 mr rounded" label="Attack" type="tel"
@@ -397,6 +367,13 @@ export class TextInput extends LitElement {
               maxLength="4" value="${this.params.def}">
             </mwc-textfield>
           </div>
+
+          <mwc-textfield 
+            @input="${(ev) => this.checkInput(ev, 'atk')}" 
+            class="w-100 mr rounded ${['link'].includes(this.params.frameType) ? 'd-block' : 'hidden'}" label="Attack" type="tel"
+            iconTrailing="close" id="atk" outlined
+            maxLength="4" value="${this.params.atk}">
+          </mwc-textfield>
 
           <mwc-button class="w-100 mb-32 mt-16" raised label="Confirm" @click="${this.submitInput}"></mwc-button>
         </div>
@@ -417,26 +394,6 @@ export class TextInput extends LitElement {
     </div>
 
     <input id="img" class="hidden" type="file" #banner @change="${this.openCrop}" accept="image/jpeg, image/jpg, image/png" />
-    <!-- <div class="d-flex content-center p-relative z-3">
-        <div class="item d-flex content-center" @click="${this.openInput}">
-          <mwc-icon>edit</mwc-icon>
-        </div>
-        <div class="circle" style="animation-delay: 0s"></div>
-        <div class="circle" style="animation-delay: 1s"></div>
-        <div class="circle" style="animation-delay: 2s"></div>
-        <div class="circle" style="animation-delay: 3s"></div>
-    </div>
-    <div class="center-img">
-      <div class="d-flex content-center p-relative z-3">
-          <div class="item d-flex content-center" @click="${this.openFile}">
-            <mwc-icon>image</mwc-icon>
-          </div>
-          <div class="circle" style="animation-delay: 0s"></div>
-          <div class="circle" style="animation-delay: 1s"></div>
-          <div class="circle" style="animation-delay: 2s"></div>
-          <div class="circle" style="animation-delay: 3s"></div>
-      </div>
-    </div> -->
     `;
   }
 }

@@ -88,6 +88,7 @@
             }
             .swiper-slide-active.square{
             border: solid 1px #6200ee;
+            background-color: rgba(255,255,255.8);
             padding: 8px;
             border-radius: 4px;
             }
@@ -99,7 +100,7 @@
                 width: 320px;
                 border-radius: 4px;
             }
-            `]}constructor(){super(),this.swiperOptions={},this.extraInfo={},this.customOpacity=!1,this.isAllone=!1,this.selected=""}firstUpdated(){if(this.createSwiper(),this._checkIndex(),this.selected){let e=this.slides.indexOf(this.selected.toLowerCase());this._handleClick(e)}}_handleClick(e){this.swiperEl.slideTo(e)}getSlideDataIndex(e,t){if(this.swiperEl.params.loop)switch(e){case 0:e=t-3;break;case t-1:e=0;break;default:--e}return e}_checkIndex(){this.swiperEl.on("slideChange",(e=>{this.dispatchCustomEvent("bgtemplate",[this.slides[e.activeIndex],this.isAllone])}))}clickLinkArrows(e,t,i){let n=[],r={"bottom-left":[45,590,60,60],"top-left":[45,134,60,60],"bottom-right":[495,590,60,60],"top-right":[495,134,60,60],bottom:[235,625,125,30],left:[35,330,30,125],right:[535,330,30,125],top:[235,130,125,30]},s=this.offsetArray[2]/600,o=this.offsetArray[3]/884;if(Number(t)===this.swiperEl.realIndex&&"link"===i){let t=e.pageX-this.offsetArray[0],i=e.pageY-this.offsetArray[1];Object.entries(r).map((e=>{let t={left:e[1][0]*s-e[1][2]*s,top:e[1][1]*o-e[1][3]*o,right:e[1][0]*s+e[1][2]*s,bottom:e[1][1]*o+e[1][3]*o};n.push(t),r[e[0]]=[e[1][0]*s,e[1][1]*o,e[1][2]*s,e[1][3]*o]}));for(let e=0;e<n.length;e++)t<n[e].right&&t>n[e].left&&i>n[e].top&&i<n[e].bottom&&this.dispatchCustomEvent("linkarrows",Object.keys(r)[e])}}dispatchCustomEvent(e,t){const i={detail:t,bubbles:!0,composed:!0};this.dispatchEvent(new CustomEvent(e,i))}createSwiper(){this.swiperEl=new rt(this.shadowRoot.getElementById("swiper"),this.swiperOptions)}render(){return V`
+            `]}constructor(){super(),this.swiperOptions={},this.extraInfo={},this.customOpacity=!1,this.isAllone=!1,this.selected=""}firstUpdated(){if(this.createSwiper(),this._checkIndex(),this.selected){let e=this.slides.indexOf(this.selected.toLowerCase());this._handleClick(e)}}_handleClick(e){this.swiperEl.slideTo(e)}getSlideDataIndex(e,t){if(this.swiperEl.params.loop)switch(e){case 0:e=t-3;break;case t-1:e=0;break;default:--e}return e}_checkIndex(){this.swiperEl.on("slideChange",(e=>{this.dispatchCustomEvent("bgtemplate",[this.slides[e.activeIndex],this.isAllone])}))}clickLinkArrows(e,t,i){let n=[],r={"bottom-left":[45,590,60,60],"top-left":[45,134,60,60],"bottom-right":[495,590,60,60],"top-right":[495,134,60,60],bottom:[235,625,125,30],left:[35,330,30,125],right:[535,330,30,125],top:[235,130,125,30]};if(Number(t)===this.swiperEl.realIndex&&"link"===i){let t=this.offsetArray[2]/600,i=this.offsetArray[3]/884,s=e.pageX-this.offsetArray[0],o=e.pageY-this.offsetArray[1];Object.entries(r).map((e=>{let s={left:e[1][0]*t-e[1][2]*t,top:e[1][1]*i-e[1][3]*i,right:e[1][0]*t+e[1][2]*t,bottom:e[1][1]*i+e[1][3]*i};n.push(s),r[e[0]]=[e[1][0]*t,e[1][1]*i,e[1][2]*t,e[1][3]*i]}));for(let e=0;e<n.length;e++)s<n[e].right&&s>n[e].left&&o>n[e].top&&o<n[e].bottom&&this.dispatchCustomEvent("linkarrows",Object.keys(r)[e])}}dispatchCustomEvent(e,t){const i={detail:t,bubbles:!0,composed:!0};this.dispatchEvent(new CustomEvent(e,i))}createSwiper(){this.swiperEl=new rt(this.shadowRoot.getElementById("swiper"),this.swiperOptions)}render(){return V`
         <div class="swiper" id="swiper">
             <div class="swiper-wrapper">
                 ${this.slides.map(((e,t)=>V`
@@ -582,37 +583,7 @@
         display: flex;
         visibility: visible;
       }
-      .circle {
-        border-radius: 50%;
-        background-color: deepskyblue;
-        width: 50px;
-        height: 50px;
-        position: absolute;
-        opacity: 0;
-        animation: scaleIn 4s infinite cubic-bezier(.36, .11, .89, .32);
-      }
-      .item {
-        z-index: 1;
-        width: 48px;
-        height: 48px;
-        position: absolute;
-        cursor: pointer;
-        color: white;
-      }
-      .item:target{
-        color: white;
-      }
-      @keyframes scaleIn {
-        from {
-          transform: scale(.5, .5);
-          opacity: .5;
-        }
-        to {
-          transform: scale(2.5, 2.5);
-          opacity: 0;
-        }
-      }
-    `}constructor(){super(),this.swiperOptions={centeredSlides:"true",initialSlide:0,loop:!1,slidesPerView:4,spaceBetween:10,grabCursor:!0},this.notLevel=!1,this.spells=["Normal","Quick-Play","Continuous","Ritual","Field","Equip"],this.traps=["Normal","Continuous","Counter"],this.race=["Aqua","Beast","Beast-Warrior","Creator-God","Cyberse","Dinosaur","Divine-Beast","Dragon","Fairy","Fiend","Fish","Insect","Machine","Plant","Psychic","Pyro","Reptile","Rock","Sea Serpent","Spellcaster","Thunder","Warrior","Winged Beast","Wyrm","Zombie"],this.slides=["dark","earth","fire","divine","light","water","wind"],this.extraInfo={url:"./assets/filters/",extension:".svg"}}closeInput(){this.show=!1}submitInput(){this.show=!1,this.dispatchCustomEvent("checkinput",this.params)}openInput(){this.show=!0,this.checkLevel(),this.requestUpdate(),setTimeout((()=>{this.getClearInput("name"),this.getClearInput("atk"),this.getClearInput("def")}),500)}checkLevel(){this.notLevel=!!["link","spell","trap"].includes(this.params.frameType),["spell","trap"].includes(this.params.frameType)&&(this.params.race="Normal")}openFile(){this.shadowRoot.getElementById("img").click()}openCrop(e){if(e.target.files[0]&&e.target.files[0].size){let t=new FileReader;t.onload=e=>{this.myImage=e.target.result,this.dispatchCustomEvent("opencrop",e.target.result)},t.readAsDataURL(e.target.files[0])}}checkInput(e,t){this.params[t]=e.target.value,this.requestUpdate()}getClearInput(e){let t=this.shadowRoot.getElementById(e).shadowRoot.querySelector("i");t.style="pointer-events: unset; cursor: pointer",t.addEventListener("click",(t=>{this.params[e]="",this.requestUpdate()}))}dispatchCustomEvent(e,t){const i={detail:t,bubbles:!0,composed:!0};this.dispatchEvent(new CustomEvent(e,i))}setEventTemplate(e){this.params.attribute=e.detail[0].toUpperCase(),this.requestUpdate()}saveCanvas(){this.dispatchCustomEvent("savecanvas",{})}render(){return this.show?V`
+    `}constructor(){super(),this.swiperOptions={centeredSlides:"true",initialSlide:0,loop:!1,slidesPerView:4,spaceBetween:10,grabCursor:!0},this.notLevel=!1,this.spells=["Normal","Quick-Play","Continuous","Ritual","Field","Equip"],this.traps=["Normal","Continuous","Counter"],this.race=["Aqua","Beast","Beast-Warrior","Creator-God","Cyberse","Dinosaur","Divine-Beast","Dragon","Fairy","Fiend","Fish","Insect","Machine","Plant","Psychic","Pyro","Reptile","Rock","Sea Serpent","Spellcaster","Thunder","Warrior","Winged Beast","Wyrm","Zombie"],this.slides=["dark","earth","fire","divine","light","water","wind"],this.extraInfo={url:"./assets/filters/",extension:".svg"}}closeInput(){this.show=!1}submitInput(){this.show=!1,this.dispatchCustomEvent("checkinput",this.params)}openInput(){this.show=!0,this.checkLevel(),this.requestUpdate(),setTimeout((()=>{this.getClearInput("name"),this.getClearInput("atk"),this.getClearInput("def")}),500)}checkLevel(){this.notLevel=!!["link","spell","trap","skill"].includes(this.params.frameType),["spell","trap"].includes(this.params.frameType)&&[...this.race].includes(this.params.race)&&(this.params.race="Normal")}openFile(){this.shadowRoot.getElementById("img").click()}openCrop(e){if(e.target.files[0]&&e.target.files[0].size){let t=new FileReader;t.onload=e=>{this.myImage=e.target.result,this.dispatchCustomEvent("opencrop",e.target.result)},t.readAsDataURL(e.target.files[0])}}checkInput(e,t){this.params[t]=e.target.value,this.requestUpdate()}getClearInput(e){let t=this.shadowRoot.getElementById(e).shadowRoot.querySelector("i");t.style="pointer-events: unset; cursor: pointer",t.addEventListener("click",(t=>{this.params[e]="",this.requestUpdate()}))}dispatchCustomEvent(e,t){const i={detail:t,bubbles:!0,composed:!0};this.dispatchEvent(new CustomEvent(e,i))}setEventTemplate(e){this.params.attribute=e.detail[0].toUpperCase(),this.requestUpdate()}saveCanvas(){this.dispatchCustomEvent("savecanvas",{})}render(){return this.show?V`
     <div class="close-container" @click="${this.closeInput}">
       <mwc-icon>close</mwc-icon>
     </div>
@@ -620,7 +591,7 @@
         <div class="container">
 
           <custom-swiper
-            class="mb-32 ${this.notLevel?"hidden":"d-block"}" isSquare
+            class="mb-32 ${["spell","trap","skill"].includes(this.params.frameType)?"hidden":"d-block"}" isSquare
             .selected="${this.params.attribute}"
             @bgtemplate="${this.setEventTemplate}"
             .slides="${this.slides}" 
@@ -675,7 +646,7 @@
             `))}
           </mwc-select>
 
-          <div class="${this.notLevel?"hidden":"d-flex"}">
+          <div class="mb-16 ${this.notLevel?"hidden":"d-flex"}">
             <mwc-textfield 
               @input="${e=>this.checkInput(e,"atk")}" 
               class="w-100 mr rounded" label="Attack" type="tel"
@@ -689,6 +660,13 @@
               maxLength="4" value="${this.params.def}">
             </mwc-textfield>
           </div>
+
+          <mwc-textfield 
+            @input="${e=>this.checkInput(e,"atk")}" 
+            class="w-100 mr rounded ${["link"].includes(this.params.frameType)?"d-block":"hidden"}" label="Attack" type="tel"
+            iconTrailing="close" id="atk" outlined
+            maxLength="4" value="${this.params.atk}">
+          </mwc-textfield>
 
           <mwc-button class="w-100 mb-32 mt-16" raised label="Confirm" @click="${this.submitInput}"></mwc-button>
         </div>
@@ -709,26 +687,6 @@
     </div>
 
     <input id="img" class="hidden" type="file" #banner @change="${this.openCrop}" accept="image/jpeg, image/jpg, image/png" />
-    <!-- <div class="d-flex content-center p-relative z-3">
-        <div class="item d-flex content-center" @click="${this.openInput}">
-          <mwc-icon>edit</mwc-icon>
-        </div>
-        <div class="circle" style="animation-delay: 0s"></div>
-        <div class="circle" style="animation-delay: 1s"></div>
-        <div class="circle" style="animation-delay: 2s"></div>
-        <div class="circle" style="animation-delay: 3s"></div>
-    </div>
-    <div class="center-img">
-      <div class="d-flex content-center p-relative z-3">
-          <div class="item d-flex content-center" @click="${this.openFile}">
-            <mwc-icon>image</mwc-icon>
-          </div>
-          <div class="circle" style="animation-delay: 0s"></div>
-          <div class="circle" style="animation-delay: 1s"></div>
-          <div class="circle" style="animation-delay: 2s"></div>
-          <div class="circle" style="animation-delay: 3s"></div>
-      </div>
-    </div> -->
     `}});var kv=i(643),Uv=i.n(kv);const Fv=o`/*!
  * Cropper.js v1.6.1
  * https://fengyuanchen.github.io/cropperjs

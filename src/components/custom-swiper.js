@@ -35,6 +35,7 @@ export class CustomSwiper extends LitElement {
             }
             .swiper-slide-active.square{
             border: solid 1px #6200ee;
+            background-color: rgba(255,255,255.8);
             padding: 8px;
             border-radius: 4px;
             }
@@ -107,9 +108,9 @@ export class CustomSwiper extends LitElement {
             'right': [535, 330, 30, 125],
             'top': [235, 130, 125, 30],
         }
-        let w = this.offsetArray[2]/600;
-        let h = this.offsetArray[3]/884;
         if((Number(index) === this.swiperEl.realIndex) && (current === 'link')){
+            let w = this.offsetArray[2]/600;
+            let h = this.offsetArray[3]/884;
             let clickedX = e.pageX - this.offsetArray[0];
             let clickedY = e.pageY - this.offsetArray[1];
             Object.entries(data).map((i)=>{
