@@ -49,7 +49,14 @@ export class CustomSwiper extends LitElement {
             }
             #swiper2{
                 position: absolute;
-                top: 1%;
+                top: 0%;
+                background: rgba(0, 0, 0, .1);
+                padding: 8px 0;
+            }
+            #swiper2 .swiper-slide-active2 .select-bg2{
+                transition: all 1s;
+                background: rgba(0, 205, 0, .2);
+                box-shadow: 0px 0px 10px rgba(0, 225, 0, .5);
             }
             .select-bg2{
                 max-width: 56px;
@@ -71,11 +78,9 @@ export class CustomSwiper extends LitElement {
         this.selected = '';
 
         this.swiperOptions2 = {
-            initialSlide: 0,
-            loop: false,
             slidesPerView: 5,
-            freeMode: true,
-            watchSlidesProgress: true,
+            grabCursor: true,
+            centeredSlides: 'true',
         };
     }
 
@@ -90,28 +95,13 @@ export class CustomSwiper extends LitElement {
 
     _handleClick(index) {
         this.swiperEl.slideTo(index);
-    }
-
-    getSlideDataIndex(activeIndex, slidesLen){
-        if(this.swiperEl.params.loop){
-            switch(activeIndex){
-                case 0:
-                    activeIndex = slidesLen-3;
-                    break;
-                case slidesLen-1:
-                    activeIndex = 0;
-                    break;
-                default:
-                    --activeIndex;
-            }
-        }
-        return  activeIndex;
+        if(this.swiperEl2) this.swiperEl2.slideTo(index);
     }
 
     _checkIndex() {
         this.swiperEl.on('slideChange', (res) => {
-            //console.log(this.swiperEl.realIndex, 'real');
             this.dispatchCustomEvent('bgtemplate', [this.slides[res.activeIndex], this.isAllone])
+            if(this.swiperEl2) this.swiperEl2.slideTo(this.swiperEl.realIndex);
         });
     }
 
@@ -164,7 +154,21 @@ export class CustomSwiper extends LitElement {
 
     createSwiper() {
         this.swiperEl = new Swiper( this.shadowRoot.getElementById('swiper'), this.swiperOptions );
-        this.swiperEl2 = new Swiper( this.shadowRoot.getElementById('swiper2'), this.swiperOptions2 );
+        if(this.isAllone)this.swiperEl2 = new Swiper( this.shadowRoot.getElementById('swiper2'), this.swiperOptions2 );
+    }
+
+    swiperThumbs(){
+        return html`
+        <div class="swiper" id="swiper2">
+            <div class="swiper-wrapper">
+                ${this.slides.map( (current, index) => html`
+                    <div class="swiper-slide ${this.swiperEl2?.realIndex === index ? 'swiper-slide-active2' : ''}" @click="${() => this._handleClick(index)}">
+                        <img src="${this.extraInfo ? this.extraInfo.url + current + this.extraInfo.extension : current}" id="${index}" class="select-bg2" />
+                    </div>
+                `)}
+            </div>
+        </div>
+        `;
     }
 
     render() {
@@ -177,17 +181,7 @@ export class CustomSwiper extends LitElement {
                 </div>`)}
             </div>
         </div>
-
-
-        <div class="swiper ${this.isAllone ? '' : 'hidden'}" id="swiper2">
-            <div class="swiper-wrapper">
-                ${this.slides.map( (current, index) => html`
-                    <div class="swiper-slide" @click="${() => this._handleClick(index)}">
-                        <img src="${this.extraInfo ? this.extraInfo.url + current + this.extraInfo.extension : current}" id="${index}" class="select-bg2" />
-                    </div>
-                `)}
-            </div>
-        </div>
+        ${this.isAllone ? this.swiperThumbs() : ''}
     `;
     }
 }

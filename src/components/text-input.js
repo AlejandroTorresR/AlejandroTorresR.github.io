@@ -7,6 +7,7 @@ import '@material/mwc-select/mwc-select.js';
 import '@material/mwc-list/mwc-list-item.js';
 import '@material/mwc-button/mwc-button.js';
 import '@material/mwc-icon/mwc-icon.js';
+import Swal from 'sweetalert2';
 export class TextInput extends LitElement {
 
   static get properties() {
@@ -289,6 +290,27 @@ export class TextInput extends LitElement {
     this.dispatchCustomEvent('savecanvas', {})
   }
 
+  sweetAlertShow(){
+    Swal.fire({
+        title: "Guardar Imagen",
+        text: "¡La imagen será descargada a su dispositivo!",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Guardar!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.dispatchCustomEvent('savecanvas', {});
+          Swal.fire({
+            title: "¡Guardado!",
+            text: "Tu archivo ha sido guardado.",
+            icon: "success"
+          });
+        }
+      });
+  }
+
   render() {
     return this.show ? html`
     <div class="close-container" @click="${this.closeInput}">
@@ -395,7 +417,7 @@ export class TextInput extends LitElement {
         <div class="item-toolbar" @click="${this.openFile}">
           <mwc-icon>image</mwc-icon>
         </div>
-        <div class="item-toolbar" @click="${this.saveCanvas}">
+        <div class="item-toolbar" @click="${this.sweetAlertShow}">
           <mwc-icon>save</mwc-icon>
         </div>
       </div>
