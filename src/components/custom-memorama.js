@@ -178,8 +178,8 @@ export class CustomMemorama extends LitElement {
                 <!-- <a-camera>
                   <a-cursor></a-cursor>
                 </a-camera> -->
-                <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
-                <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
+                <a-entity oculus-touch-controls="hand: left"></a-entity>
+                <a-entity oculus-touch-controls="hand: right"></a-entity>
                 <a-sky color="#ECECEC"></a-sky>
             </a-scene>
         `;
