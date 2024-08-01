@@ -1,6 +1,7 @@
 :root{
     --primary-gradient: linear-gradient(225deg, rgba(0, 0, 0, 0.08) 55%, rgba(255, 255, 255, 0.38) 43%);
     --secondary-gradient: linear-gradient(102deg, #34469A 6%, #538FCB 95%);
+    --ion-color-primary: #3880ff;
     --primary-color: #34469A;
     --black100: #000000;
     --black75: #181818;
@@ -24,6 +25,7 @@
     font-display: block;
   }
 
+.bg-black50{ background: var(--black50)}
 .w-100{ width: 100%; }
 .text-center{ text-align: center; }
 .mt-32{ margin-top: 32px; }

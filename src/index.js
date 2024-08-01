@@ -4,3 +4,5 @@ import './components/custom-swiper.js';
 import './components/text-input.js';
 import './components/custom-cropper.js';
 import './components/custom-container.js';
+import './components/product-info.js';
+import './components/card-store.js';

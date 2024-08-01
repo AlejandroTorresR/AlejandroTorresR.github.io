@@ -20,6 +20,11 @@ module.exports = {
             template: './src/maker.html',
             chunks: ['exampleEntry']
         }),
+        new HtmlWebpackPlugin({
+            filename: 'product.html',
+            template: './src/product.html',
+            chunks: ['exampleEntry']
+        }),
         new CopyWebpackPlugin({
             patterns: [
                 { from: 'src/assets', to: 'assets' },

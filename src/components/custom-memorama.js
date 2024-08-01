@@ -175,9 +175,12 @@ export class CustomMemorama extends LitElement {
         return html`
             <a-scene xr-mode-ui="enabled: true">
                 ${this.createPlaneArray()}
-                <a-camera>
+                <!-- <a-camera>
                   <a-cursor></a-cursor>
-                </a-camera>
+                </a-camera> -->
+                <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
+                <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
+                <a-sky color="#ECECEC"></a-sky>
             </a-scene>
         `;
     }

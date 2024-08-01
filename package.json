@@ -26,6 +26,7 @@
   "dependencies": {
     "@github/mini-throttle": "^2.1.1",
     "@material/mwc-button": "^0.27.0",
+    "@material/mwc-fab": "^0.27.0",
     "@material/mwc-icon": "^0.27.0",
     "@material/mwc-select": "^0.27.0",
     "@material/mwc-slider": "^0.27.0",
@@ -33,6 +34,8 @@
     "@material/mwc-textfield": "^0.27.0",
     "aframe": "^1.5.0",
     "aframe-event-set-component": "^5.0.0",
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
     "cropperjs": "^1.6.1",
     "lit": "^3.1.2",
     "sweetalert2": "^11.10.7",
