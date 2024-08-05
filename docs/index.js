@@ -55,8 +55,10 @@
                 <!-- <a-camera>
                   <a-cursor></a-cursor>
                 </a-camera> -->
-                <a-entity oculus-touch-controls="hand: left"></a-entity>
-                <a-entity oculus-touch-controls="hand: right"></a-entity>
+                <a-camera look-controls="magicWindowTrackingEnabled: false, mouseEnabled: false, touchEnabled: false">
+                    <a-entity laser-controls="hand: left"></a-entity>
+                    <a-entity laser-controls="hand: right"></a-entity>
+                </a-camera>
                 <a-sky color="#ECECEC"></a-sky>
             </a-scene>
         `}});class de extends ae{static styles=a`
